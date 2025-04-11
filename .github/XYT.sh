@@ -21,9 +21,6 @@ echo "- Url: https://github.com/inotia00/$1/releases/download/v${Vsion1##*/}/$2-
 }
 
 
-# Tải json
-#vjson="$(Xem https://github.com/inotia00/revanced-patches | grep -om1 'inotia00/revanced-patches/releases/tag/.*\"' | sed -e 's|/v|/|g' -e 's|\"||g')"
-
 # tải apk
 TaiYT() {
 urrl="https://www.apkmirror.com"
@@ -39,7 +36,7 @@ file "apk/$1" | tee "apk/$1.txt";
 
 # lấy dữ liệu phiên bản mặc định
 echo "- Patches YouTube mới nhất..."
-#Vidon="$(Xem "https://github.com/inotia00/revanced-patches/releases/download/v${vjson##*/}/patches.json" | jq -r .[1].compatiblePackages[0].versions[] | tac | head -n1)"
+Vidon=$(Xem https://raw.githubusercontent.com/inotia00/revanced-patches/revanced-extended/patches.json | jq -r .[1].compatiblePackages[] | tac | head -n2 | awk -F\" '{print $2}')
 
 # là amoled
 [ "$AMOLED" == 'true' ] && amoled2='-Amoled'
@@ -68,9 +65,7 @@ Vidon="$VER"
 Kad=Build
 V=V
 elif [ "$VERSION" == 'Auto' ]; then
-#VER="$Vidon"
 VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}')
-#Vidon="xxx"
 Kad=Auto
 V=U
 else
