@@ -3,7 +3,7 @@ lib1="lib/revanced-cli.jar"
 lib2="lib/revanced-patches.jar"
 lib3="lib/revanced-integrations.apk"
 
-pbsta(){
+pbsta() {
 Vsion1="$(Xem https://github.com/inotia00/$1 | grep -om1 "inotia00/$1/releases/tag/.*\"" | sed -e 's|/v|/|g' -e 's|\"||g')"
 Taive "https://github.com/inotia00/$1/releases/download/v${Vsion1##*/}/$2-${Vsion1##*/}$4.$3" "lib/$1.jar"; 
 
@@ -12,7 +12,7 @@ echo "- Url: https://github.com/inotia00/$1/releases/download/v${Vsion1##*/}/$2-
 }
  
 # tải tool dev
-pbdev(){
+pbdev() {
 Vsion1="$(Xem https://github.com/inotia00/$1/releases | grep -om1 "inotia00/$1/releases/tag/.*dev" | cut -d '"' -f1 | sed -e 's|/v|/|g' -e 's|\"||g')"
 Taive "https://github.com/inotia00/$1/releases/download/v${Vsion1##*/}/$2-${Vsion1##*/}$4.$3" "lib/$1.jar"; 
 
@@ -25,7 +25,7 @@ echo "- Url: https://github.com/inotia00/$1/releases/download/v${Vsion1##*/}/$2-
 #vjson="$(Xem https://github.com/inotia00/revanced-patches | grep -om1 'inotia00/revanced-patches/releases/tag/.*\"' | sed -e 's|/v|/|g' -e 's|\"||g')"
 
 # tải apk
-TaiYT(){
+TaiYT() {
 urrl="https://www.apkmirror.com"
 uak1="$urrl$(Xem "$urrl/apk/$2" | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
 uak2="$urrl$(Xem "$uak1" | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
@@ -47,13 +47,13 @@ echo "- Patches YouTube mới nhất..."
 [ "$TYPE" == 'true' ] && Mro='-d "GmsCore support"'
 
 # Xoá lib dựa vào abi
-if [ "$DEVICE" == "arm64-v8a" ];then
+if [ "$DEVICE" == "arm64-v8a" ]; then
 lib="lib/x86/* lib/x86_64/* lib/armeabi-v7a/*"
 ach="arm64"
-elif [ "$DEVICE" == "x86" ];then
+elif [ "$DEVICE" == "x86" ]; then
 lib="lib/x86_64/* lib/arm64-v8a/* lib/armeabi-v7a/*"
 ach="x86"
-elif [ "$DEVICE" == "x86_64" ];then
+elif [ "$DEVICE" == "x86_64" ]; then
 lib="lib/x86/* lib/arm64-v8a/* lib/armeabi-v7a/*"
 ach="x64"
 else
@@ -62,7 +62,7 @@ ach="arm"
 fi
 
 echo "  $Vidon"
-if [ "$VERSION" == 'New' ];then
+if [ "$VERSION" == 'New' ]; then
 [ -z "$Vidon" ] && VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}') && Vidon="$VER" || VER="$Vidon"
 Kad=Build
 V=V
@@ -82,7 +82,7 @@ Upenv V "$V"
 Upenv Kad "$Kad"
 Upenv VER "$VER"
 
-if [[ "$VERSION" == 'Auto' ]] && [[ "$(Xem https://github.com/$GITHUB_REPOSITORY/releases/download/Up/Up-X${V}notes.json | grep -cm1 "${VER//./}")" == 1 ]];then
+if [[ "$VERSION" == 'Auto' ]] && [[ "$(Xem https://github.com/$GITHUB_REPOSITORY/releases/download/Up/Up-X${V}notes.json | grep -cm1 "${VER//./}")" == 1 ]]; then
 echo "! Là phiên bản mới nhất."
 #gh run cancel $GITHUB_RUN_ID
 #sleep 10
@@ -93,7 +93,7 @@ echo
 # Tải tool cli
 # Tải tool cli
 echo "- Tải tool cli, patches, integrations..."
-if [ "$DEV" == "Develop" ];then
+if [ "$DEV" == "Develop" ]; then
 echo "  Dùng Dev"
 echo
 pbdev revanced-cli revanced-cli jar -all
@@ -129,8 +129,8 @@ Loading apk/YouTube1.txt apk/YouTube2.txt
 [ -z "$(hexdump -n 2 apk/YouTube1 | grep '4b50')" ] && rm -rf apk/YouTube1
 [ -z "$(hexdump -n 2 apk/YouTube2 | grep '4b50')" ] && rm -rf apk/YouTube2
 
-if [ -e apk/YouTube1 ];then
-if [ "$(unzip -l apk/YouTube1 | grep -cm1 'base.apk')" == 1 ];then
+if [ -e apk/YouTube1 ]; then
+if [ "$(unzip -l apk/YouTube1 | grep -cm1 'base.apk')" == 1 ]; then
 echo "- apk1 thành apks."
 mv apk/YouTube1 apk/YouTube.apks
 else
@@ -141,8 +141,8 @@ else
 echo "- không có file apk1"
 fi
 
-if [ -e apk/YouTube2 ];then
-if [ "$(unzip -l apk/YouTube2 | grep -cm1 'base.apk')" == 1 ];then
+if [ -e apk/YouTube2 ]; then
+if [ "$(unzip -l apk/YouTube2 | grep -cm1 'base.apk')" == 1 ]; then
 echo "- apk2 thành apks."
 mv apk/YouTube2 apk/YouTube.apks
 else
@@ -154,9 +154,9 @@ echo "- không có file apk2"
 fi
 
 
-if [ "$TYPE" == 'true' ];then
+if [ "$TYPE" == 'true' ]; then
 lib='lib/*/*'
-if [ -e apk/YouTube.apks ];then
+if [ -e apk/YouTube.apks ]; then
 unzip -qo apk/YouTube.apks 'base.apk' -d Tav
 unzip -qo apk/YouTube.apk lib/$DEVICE/* -d Tav
 mv -f Tav/lib/$DEVICE Tav/lib/$ach
@@ -176,12 +176,12 @@ echo "- Xoá lib thừa."
 zip -qr apk/YouTube.apk -d $lib
 
 # Xử lý revanced patches
-if [ "$Vidon" != "$VER" ];then
+if [ "$Vidon" != "$VER" ]; then
 echo "- Chuyển đổi phiên bản $VER"
 unzip -qo "$lib2" -d $HOME/jar
 for vak in $(grep -Rl "$Vidon" $HOME/jar); do
 cp -rf $vak test
-XHex test | sed -e "s/$(echo -n "$Vidon" | XHex)/$(echo -n "$VERSION" | XHex)/" | ZHex > $vak
+XHex test | sed -e "s/$(echo -n "$Vidon" | XHex)/$(echo -n "$VER" | XHex)/" | ZHex > $vak
 done
 cd $HOME/jar
 rm -fr $lib2
@@ -210,7 +210,7 @@ echo '- Quá trình xoá rác xong' | tee 1.txt
 # Chờ xây dựng xong
 Loading "1.txt" "2.txt"
 
-if [ "$TYPE" == 'true' ];then
+if [ "$TYPE" == 'true' ]; then
 mv YT.apk $HOME/Tav/YouTube.apk
 else
 apksign YT.apk $HOME/Up/XYT-$VER-$ach${amoled2}.apk
