@@ -5,7 +5,7 @@ on:
       VERSION:
         description: 'Example: 20.07.39'
         required: false
-        default: 'Auto'
+        default: 'New'
       DEVICE:
         description: 'Select device'
         required: false
