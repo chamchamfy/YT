@@ -5,7 +5,7 @@ lib2="lib/revanced-patches.jar"
 lib3="lib/revanced-patches-template.jar"
 # Tải tool sta
 pbsta(){
-Vsion1="$(Xem https://github.com/ReVanced/$1 | grep -om1 'ReVanced/'$1'/releases/tag/.*\"' | sed -e 's|dev|zzz|g' -e 's|v||g' -e 's|zzz|dev|g' -e 's|\"||g')"
+Vsion1="$(Xem https://github.com/ReVanced/$1 | grep -om1 "ReVanced/$1/releases/tag/.*\"" | sed -e 's|/v|/|g' -e 's|\"||g')"
 Taive "https://github.com/ReVanced/$1/releases/download/v${Vsion1##*/}/$2-${Vsion1##*/}$4.$3" "lib/$1.jar"; 
 
 echo "- Url: https://github.com/ReVanced/$1/releases/download/v${Vsion1##*/}/$2-${Vsion1##*/}$4.$3
@@ -14,7 +14,7 @@ echo "- Url: https://github.com/ReVanced/$1/releases/download/v${Vsion1##*/}/$2-
  
 # tải tool dev
 pbdev(){
-Vsion1="$(Xem https://github.com/ReVanced/$1/releases | grep -om1 'ReVanced/'$1'/releases/tag/.*dev' | cut -d '"' -f1 | sed -e 's|dev|zzz|g' -e 's|v||g' -e 's|zzz|dev|g' -e 's|\"||g')"
+Vsion1="$(Xem https://github.com/ReVanced/$1/releases | grep -om1 "ReVanced/$1/releases/tag/.*dev" | cut -d '"' -f1 | sed -e 's|/v|/|g' -e 's|\"||g')"
 Taive "https://github.com/ReVanced/$1/releases/download/v${Vsion1##*/}/$2-${Vsion1##*/}$4.$3" "lib/$1.jar"; 
 
 echo "- Url: https://github.com/ReVanced/$1/releases/download/v${Vsion1##*/}/$2-${Vsion1##*/}$4.$3
