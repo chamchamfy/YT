@@ -34,10 +34,6 @@ file "apk/$1" | tee "apk/$1.txt";
 # Load dữ liệu cài đặt 
 . $HOME/.github/options/Ytx.md
 
-# lấy dữ liệu phiên bản mặc định
-Vidon=$(Xem https://raw.githubusercontent.com/inotia00/revanced-patches/revanced-extended/patches.json | jq -r .[1].compatiblePackages[] | tac | head -n2 | awk -F\" '{print $2}')
-echo "- Patches YouTube mới nhất  $Vidon"
-
 # là amoled
 [ "$AMOLED" == 'true' ] && amoled2='-Amoled'
 [ "$AMOLED" == 'true' ] || theme='-d Theme'
@@ -58,14 +54,18 @@ lib="lib/arm64-v8a/* lib/x86/* lib/x86_64/*"
 ach="arm"
 fi
 
-
+# lấy dữ liệu phiên bản mặc định
+Vidon=$(Xem https://raw.githubusercontent.com/inotia00/revanced-patches/revanced-extended/patches.json | jq -r .[1].compatiblePackages[] | sed -e '/\[/d; /\]/d; /^$/d' | tac | head -n1 | awk -F\" '{print $2}')
+echo "     $Vidon"
 if [ "$VERSION" == 'New' ]; then
 VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}')
-Vidon="$VER" 
+[ -z "$VER" ] && VER=$Vidon
+Vidon="$VER"
 Kad=Build
 V=V
 elif [ "$VERSION" == 'Auto' ]; then
 VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}')
+[ -z "$VER" ] && VER=$Vidon
 Kad=Auto
 V=U
 else
