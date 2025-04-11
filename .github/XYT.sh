@@ -4,7 +4,7 @@ lib2="lib/revanced-patches.jar"
 lib3="lib/revanced-integrations.apk"
 
 pbsta(){
-Vsion1="$(Xem https://github.com/inotia00/$1 | grep -om1 'inotia00/'$1'/releases/tag/.*\"' | sed -e 's|dev|zzz|g' -e 's|v||g' -e 's|zzz|dev|g' -e 's|\"||g')"
+Vsion1="$(Xem https://github.com/inotia00/$1 | grep -om1 "inotia00/$1/releases/tag/.*\"" | sed -e 's|/v|/|g' -e 's|\"||g')"
 Taive "https://github.com/inotia00/$1/releases/download/v${Vsion1##*/}/$2-${Vsion1##*/}$4.$3" "lib/$1.jar"; 
 
 echo "- Url: https://github.com/inotia00/$1/releases/download/v${Vsion1##*/}/$2-${Vsion1##*/}$4.$3
@@ -13,7 +13,7 @@ echo "- Url: https://github.com/inotia00/$1/releases/download/v${Vsion1##*/}/$2-
  
 # tải tool dev
 pbdev(){
-Vsion1="$(Xem https://github.com/inotia00/$1/releases | grep -om1 'inotia00/'$1'/releases/tag/.*dev' | cut -d '"' -f1 | sed -e 's|dev|zzz|g' -e 's|v||g' -e 's|zzz|dev|g' -e 's|\"||g')"
+Vsion1="$(Xem https://github.com/inotia00/$1/releases | grep -om1 "inotia00/$1/releases/tag/.*dev" | cut -d '"' -f1 | sed -e 's|/v|/|g' -e 's|\"||g')"
 Taive "https://github.com/inotia00/$1/releases/download/v${Vsion1##*/}/$2-${Vsion1##*/}$4.$3" "lib/$1.jar"; 
 
 echo "- Url: https://github.com/inotia00/$1/releases/download/v${Vsion1##*/}/$2-${Vsion1##*/}$4.$3
@@ -22,7 +22,7 @@ echo "- Url: https://github.com/inotia00/$1/releases/download/v${Vsion1##*/}/$2-
 
 
 # Tải json
-#vjson="$(Xem https://github.com/inotia00/revanced-patches | grep -om1 'inotia00/revanced-patches/releases/tag/.*\"' | sed -e 's|dev|zzz|g' -e 's|v||g' -e 's|zzz|dev|g' -e 's|\"||g')"
+#vjson="$(Xem https://github.com/inotia00/revanced-patches | grep -om1 'inotia00/revanced-patches/releases/tag/.*\"' | sed -e 's|/v|/|g' -e 's|\"||g')"
 
 # tải apk
 TaiYT(){
@@ -62,14 +62,12 @@ ach="arm"
 fi
 
 echo "  $Vidon"
-if [ "$VERSION" == 'Auto' ];then
-VER="$Vidon"
-[ -z "$Vidon" ] && VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}') && Vidon="$VER"
+if [ "$VERSION" == 'New' ];then
+[ -z "$Vidon" ] && VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}') && Vidon="$VER" || VER="$Vidon"
 Kad=Build
 V=V
-elif [ "$VERSION" == 'Autu' ];then
-VER="$Vidon"
-[ -z "$Vidon" ] && VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}')
+elif [ "$VERSION" == 'Auto' ]; then
+[ -z "$Vidon" ] && VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}') || VER="$Vidon"
 Kad=Auto
 V=U
 else
@@ -84,7 +82,7 @@ Upenv V "$V"
 Upenv Kad "$Kad"
 Upenv VER "$VER"
 
-if [[ "$VERSION" == 'Autu' ]] && [[ "$(Xem https://github.com/$GITHUB_REPOSITORY/releases/download/Up/Up-X${V}notes.json | grep -cm1 "${VER//./}")" == 1 ]];then
+if [[ "$VERSION" == 'Auto' ]] && [[ "$(Xem https://github.com/$GITHUB_REPOSITORY/releases/download/Up/Up-X${V}notes.json | grep -cm1 "${VER//./}")" == 1 ]];then
 echo "! Là phiên bản mới nhất."
 #gh run cancel $GITHUB_RUN_ID
 #sleep 10
