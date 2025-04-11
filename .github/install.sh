@@ -16,39 +16,39 @@ User="User-Agent: Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, 
 feature="$FEATURE"
 
 # khu vực fusion 
-Xem () { curl -s -L -G -N -H "$User" --connect-timeout 20 "$1"; }
-Taive () { curl -s -L -k -H "$User" --connect-timeout 20 "$1" -o "$2"; }
-XHex(){ xxd -p "$@" | tr -d "\n" | tr -d ' '; }
-ZHex(){ xxd -r -p "$@"; }
-apksign () { java -jar $HOME/.github/Tools/apksigner.jar sign --cert "$HOME/.github/Tools/testkey.x509.pem" --key "$HOME/.github/Tools/testkey.pk8" --out "$2" "$1"; }
-Upenv(){ echo "$1=$2" >> $GITHUB_ENV; }
-checkfile(){ [ -e "$1" ] && echo "FILE:  OK ${1##*/}" || ( echo "- Lỗi không không thấy file ${1##*/}"; exit 1; ); }
-checkzip(){ [ "$(file $1 | grep -cm1 'Zip')" == 1 ] && echo "FILE:  OK ${1##*/}" || ( echo "- Lỗi file ${1##*/}"; exit 1; ); }
+Xem() { curl -s -L -G -N -H "$User" --connect-timeout 20 "$1"; }
+Taive() { curl -s -L -k -H "$User" --connect-timeout 20 "$1" -o "$2"; }
+XHex() { xxd -p "$@" | tr -d "\n" | tr -d ' '; }
+ZHex() { xxd -r -p "$@"; }
+apksign() { java -jar $HOME/.github/Tools/apksigner.jar sign --cert "$HOME/.github/Tools/testkey.x509.pem" --key "$HOME/.github/Tools/testkey.pk8" --out "$2" "$1"; }
+Upenv() { echo "$1=$2" >> $GITHUB_ENV; }
+checkfile() { [ -e "$1" ] && echo "FILE:  OK ${1##*/}" || ( echo "- Lỗi không không thấy file ${1##*/}"; exit 1; ); }
+checkzip() { [ "$(file $1 | grep -cm1 'Zip')" == 1 ] && echo "FILE:  OK ${1##*/}" || ( echo "- Lỗi file ${1##*/}"; exit 1; ); }
 
-Loading(){
+Loading() {
 while true; do
-if [ -e "$1" ] && [ -e "$2" ];then
+if [ -e "$1" ] && [ -e "$2" ]; then
 echo "FILE:  OK"
 break
 else
 sleep 1
 gfdgv=$(($gfdgv + 1))
-if [ "$gfdgv" -ge 200 ];then
+if [ "$gfdgv" -ge 200 ]; then
 echo "- Quá thời gian cho phép, vì $1 $2...";
 break
 fi
 fi
 done; }
 
-checklog(){
+checklog() {
 while true; do
-if [ "$(grep -cm1 "$1" "$2")" == 1 ];then
+if [ "$(grep -cm1 "$1" "$2")" == 1 ]; then
 echo "Đã tìm thấy:  $1"
 break
 else
 sleep 1
 gfdgv=$(($gfdgv + 1))
-if [ "$gfdgv" -ge 100 ];then
+if [ "$gfdgv" -ge 100 ]; then
 echo "- Quá thời gian cho phép, sẽ tự bỏ qua...";
 break
 fi
