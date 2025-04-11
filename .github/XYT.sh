@@ -35,8 +35,8 @@ file "apk/$1" | tee "apk/$1.txt";
 . $HOME/.github/options/Ytx.md
 
 # lấy dữ liệu phiên bản mặc định
-echo "- Patches YouTube mới nhất..."
 Vidon=$(Xem https://raw.githubusercontent.com/inotia00/revanced-patches/revanced-extended/patches.json | jq -r .[1].compatiblePackages[] | tac | head -n2 | awk -F\" '{print $2}')
+echo "- Patches YouTube mới nhất  $Vidon"
 
 # là amoled
 [ "$AMOLED" == 'true' ] && amoled2='-Amoled'
@@ -58,7 +58,7 @@ lib="lib/arm64-v8a/* lib/x86/* lib/x86_64/*"
 ach="arm"
 fi
 
-echo "  $Vidon"
+
 if [ "$VERSION" == 'New' ]; then
 VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}')
 Vidon="$VER" 
