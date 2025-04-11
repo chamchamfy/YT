@@ -28,7 +28,7 @@ jobs:
           if [ -z "$VERSION" ];then
           DEVICE='armeabi-v7a'
           DEV='Stable'
-          VERSION='Autu'
+          VERSION='Auto'
           TYPE='true'
           fi
           . .github/install.sh
@@ -64,7 +64,7 @@ jobs:
           if [ -z "$VERSION" ];then
           DEVICE='armeabi-v7a'
           DEV='Stable'
-          VERSION='Autu'
+          VERSION='Auto'
           TYPE='false'
           fi
           . .github/install.sh
@@ -93,7 +93,7 @@ jobs:
           if [ -z "$VERSION" ];then
           DEVICE='armeabi-v7a'
           DEV='Stable'
-          VERSION='Autu'
+          VERSION='Auto'
           TYPE='true'
           AMOLED='true'
           fi
@@ -130,7 +130,7 @@ jobs:
           if [ -z "$VERSION" ];then
           DEVICE='armeabi-v7a'
           DEV='Stable'
-          VERSION='Autu'
+          VERSION='Auto'
           TYPE='false'
           AMOLED='true'
           fi
