@@ -62,14 +62,12 @@ ach="arm"
 fi
 
 echo "  $Vidon"
-if [ "$VERSION" == 'Auto' ];then
-VER="$Vidon"
-[ -z "$Vidon" ] && VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}') && Vidon="$VER"
+if [ "$VERSION" == 'New' ];then
+[ -z "$Vidon" ] && VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}') && Vidon="$VER" || VER="$Vidon"
 Kad=Build$Vop
 V=V$Vop2
-elif [ "$VERSION" == 'Autu' ];then
-VER="$Vidon"
-[ -z "$Vidon" ] && VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}')
+elif [ "$VERSION" == 'Auto' ];then
+[ -z "$Vidon" ] && VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}') || VER="$Vidon"
 Kad=Auto$Vop
 V=U$Vop2
 else
@@ -83,7 +81,7 @@ Upenv V "$V"
 Upenv Kad "$Kad"
 Upenv VER "$VER"
 
-if [[ "$VERSION" == 'Autu' ]] && [[ "$(Xem https://github.com/$GITHUB_REPOSITORY/releases/download/Up/Up-K${V}notes.json | grep -cm1 "${VER//./}")" == 1 ]];then
+if [[ "$VERSION" == 'Auto' ]] && [[ "$(Xem https://github.com/$GITHUB_REPOSITORY/releases/download/Up/Up-K${V}notes.json | grep -cm1 "${VER//./}")" == 1 ]];then
 echo "! Là phiên bản mới nhất."
 #gh run cancel $GITHUB_RUN_ID
 #sleep 10
