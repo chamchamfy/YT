@@ -62,6 +62,7 @@ ach="arm"
 fi
 
 Vidon=$(Xem https://raw.githubusercontent.com/ReVanced/revanced-patches/main/patches/src/main/kotlin/app/revanced/patches/youtube/ad/general/HideAdsPatch.kt | grep -A9 'com.google.android.youtube' | sed -e '/)/d; /(/d; /{/d; /^$/d' | tail -n1 | awk -F\" '{print $2}')
+Vidon2=$(Xem https://raw.githubusercontent.com/ReVanced/revanced-patches/main/CHANGELOG.md | grep -m1 'YouTube:' | awk -F\` '{print $2}')
 echo "  $Vidon"
 if [ "$VERSION" == 'New' ]; then
 VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}')
