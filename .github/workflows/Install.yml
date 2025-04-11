@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       VERSION:
-        description: 'Example: 19.47.53'
+        description: 'Example: 20.07.39'
         required: false
         default: 'Auto'
       DEVICE:
