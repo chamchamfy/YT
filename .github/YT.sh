@@ -66,12 +66,11 @@ echo "  $Vidon"
 if [ "$VERSION" == 'New' ]; then
 VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}')
 [ -z "$VER" ] && VER=$Vidon
-Vidon="$VER"
 Kad=Build$Vop
 V=V$Vop2
 elif [ "$VERSION" == 'Auto' ]; then
-VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}') 
-[ -z "$VER" ] && VER=$Vidon
+VER=$Vidon
+[ -z "$Vidon" ] && VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}')
 Kad=Auto$Vop
 V=U$Vop2
 else
