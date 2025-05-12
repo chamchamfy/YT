@@ -1,11 +1,14 @@
 
 # YT-RE - YT-EXT 
 [![YT-RE](https://github.com/chamchamfy/YT/actions/workflows/Install.yml/badge.svg)](https://github.com/chamchamfy/YT/actions/workflows/Install.yml) [![YT-EXT](https://github.com/chamchamfy/YT/actions/workflows/XInstall.yml/badge.svg)](https://github.com/chamchamfy/YT/actions/workflows/XInstall.yml)
-+ Are two different types of YouTube mods, pay attention to the names when downloading
 
-+ Build, Edit: is the manual build version
+Use for both non-root and root:
 
-+ Hybrid for root(magisk, etc) management software, and flash Twrp(need rw)
++ YT.zip: install in magisk (added hidden root) and twrp(rw)
+
++ YT.apk: This version installs without root will use separate gms application
+
++ YT-rsign.apk: will be used for devices that have patched core patch and patched signature.
 
 + How to delete Youtube in recovery: delete /data/Youtube folder 
 
@@ -13,14 +16,19 @@
 ---
 
 > [!Tip]
-> All versions: [Release](https://github.com/chamchamfy/YT/releases)
+> Version: [Release](https://github.com/chamchamfy/YT/releases)
+> 
+> **[![Downloads](https://img.shields.io/github/downloads/chamchamfy/YT/total?label=Downloads&logo=github&abbreviated=true&color=blue)](https://github.com/chamchamfy/YT/releases)**
+
+> [!note]
+> ZT-rsign.apk version is only installed when the device has corepatch installed.
 
 **Revanced CLI**
 ---
 
 - All support issues in this group
 
-   > [Telegram](https://t.me/toolmod)
+   > [Telegram](https://t.me/tooltree)
 
 - See the version that Revanced they support for the latest build.
 
@@ -35,24 +43,6 @@
 - The latest Youtube version
 
    > [Apkmirror](https://www.apkmirror.com/apk/google-inc/youtube/)
-
-**Add-on Download**
----
-
-- The following applications support video downloading
-
-   > [NewPipe](https://newpipe.net)
-
-   > [PowerTube](https://github.com/razar-dev/PowerTube)
-
-**Language Contribution**
----
-
-- I don't know many languages, you can contribute languages ​​at the link below.
-
-   > [Language](https://github.com/chamchamfy/YT/tree/Vip/.github/Language)
-
-- Or submit the language file to the issue.
 
 **Good luck!**
 ---
