@@ -1,19 +1,19 @@
-# kakathic
-RD="$RANDOM"
-while true; do
-[ -e /sdcard/Android ] && break || sleep 1
-done
+# chamchamfy
 MODPATH="${0%/*}"
+rm -fr $MODPATH/YouTube/*
+
+while true; do
+[ -e /sdcard/Android ] && break || sleep 2
+done
 . $MODPATH/YT.sh
+sleep 2
 
 if [ "$(ls -l $(linkAPK) | awk '{print $5}')" == "$(cat $MODPATH/SIZE)" ];then
 mountYT "$MODPATH/YouTube.apk" "$(linkAPK)"
-[ -e $MODPATH/lib ] && cpLIB $MODPATH/lib "$(linkAPK)"
 offCH
 else
-installYT $MODPATH/base.apk
+installYT
 ls -l "$MODPATH/YouTube.apk" | awk '{print $5}' > $MODPATH/SIZE
-cpLIB $MODPATH/lib "$(linkAPK)"
 mountYT $MODPATH/YouTube.apk "$(linkAPK)"
 offCH
 fi
