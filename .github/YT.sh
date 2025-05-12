@@ -35,7 +35,6 @@ uak2="$urrl$(Xem "$uak1" | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | 
 Taive "$uak2" "apk/$1"
 echo "Link: $uak2"
 file "apk/$1" | tee "apk/$1.txt";
-#[ -n "$(hexdump -n 2 apk/$1 | grep '4b50')" ] && echo > "apk/$1.txt" || ( echo "! Lỗi $1" | tee "apk/$1.txt"; );
 }
 
 # Load dữ liệu cài đặt 
@@ -61,6 +60,31 @@ lib="lib/arm64-v8a/* lib/x86/* lib/x86_64/*"
 ach="arm"
 fi
 
+echo
+# Tải tool cli
+echo "- Tải tool cli, patches, integrations..."
+if [ "$DEV" == "Develop" ]; then
+echo "  Dùng Dev"
+echo
+pbdev revanced-cli revanced-cli jar -all
+pbdev revanced-patches patches rvp
+pbdev revanced-patches-template patches rvp
+
+else
+echo "  Dùng Sta"
+echo
+pbsta revanced-cli revanced-cli jar -all
+pbsta revanced-patches patches rvp
+pbsta revanced-patches-template patches rvp
+fi
+
+# kiểm tra tải tool
+checkzip "$lib1"
+checkzip "$lib2"
+checkzip "$lib3"
+echo
+
+# kiểm tra phiên bản 
 Vidon=$(Xem https://raw.githubusercontent.com/ReVanced/revanced-patches/main/patches/src/main/kotlin/app/revanced/patches/youtube/ad/general/HideAdsPatch.kt | grep -A9 'com.google.android.youtube' | sed -e '/)/d; /(/d; /{/d; /^$/d' | tail -n1 | awk -F\" '{print $2}')
 Vidon2=$(Xem https://raw.githubusercontent.com/ReVanced/revanced-patches/main/CHANGELOG.md | grep -m1 'YouTube:' | awk -F\` '{print $2}')
 echo "  $Vidon"
@@ -91,30 +115,6 @@ echo "! Là phiên bản mới nhất."
 #sleep 10
 #exit 0
 fi
-
-echo
-# Tải tool cli
-echo "- Tải tool cli, patches, integrations..."
-if [ "$DEV" == "Develop" ]; then
-echo "  Dùng Dev"
-echo
-pbdev revanced-cli revanced-cli jar -all
-pbdev revanced-patches patches rvp
-pbdev revanced-patches-template patches rvp
-
-else
-echo "  Dùng Sta"
-echo
-pbsta revanced-cli revanced-cli jar -all
-pbsta revanced-patches patches rvp
-pbsta revanced-patches-template patches rvp
-fi
-
-# kiểm tra tải tool
-checkzip "$lib1"
-checkzip "$lib2"
-checkzip "$lib3"
-echo
 
 echo "- Tải YouTube $VER apk, apks..."
 # Tải YouTube apk
@@ -157,15 +157,12 @@ if [ "$TYPE" == 'true' ]; then
 lib='lib/*/*'
 if [ -e apk/YouTube.apks ]; then
 echo "- Giải nén base.apk"
-unzip -qo apk/YouTube.apks 'base.apk' -d Tav
-unzip -qo apk/YouTube.apk lib/$DEVICE/* -d Tav
-mv -f Tav/lib/$DEVICE Tav/lib/$ach
+unzip -qo apk/YouTube.apks 'base.apk' "split_config.${DEVICE//-/_}.apk" split_config.xxhdpi.apk -d Tav   
 else
 echo "- Giải nén Lib"
 cp apk/YouTube.apk Tav/base.apk
-unzip -qo apk/YouTube.apk lib/$DEVICE/* -d Tav
-mv -f Tav/lib/$DEVICE Tav/lib/$ach
 fi
+unzip -qo apk/YouTube.apk lib/$DEVICE/* -d tmp
 fi
 
 # Copy 
@@ -190,38 +187,24 @@ cd $HOME
 fi
 
 # MOD YouTube 
-(
-
 echo "▼ Bắt đầu quá trình xây dựng..."
 echo
-eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 -p $lib3 apk/YouTube.apk -o YT.apk "$Mro $theme $Tof $Ton $feature"" 2>&1 | tee Log2.txt
-grep 'SEVERE:' Log2.txt | sed 's|failed:|failed|g' > Log.txt
-echo '- Quá trình xây dựng apk xong.' | tee 2.txt
+eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 apk/YouTube.apk -o YT.apk "$Mro $theme $Tof $Ton $feature""
+echo '- Quá trình xây dựng apk xong.'
+echo
 
-) & (
-
-sleep 5
-zip -qr apk/YouTube.apk -d res/*
-
-#checklog 'Decoding resources' Log2.txt
-sleep 5
-
-for kvc in $(ls $HOME/.github/Language); do
-Tmk="$(echo $HOME/YT-temporary-files/patcher/apk/res/${kvc%.*})"
-mkdir -p $Tmk
-[ -e $Tmk/strings.xml ] && sed -i "/<\/resources>/d" $Tmk/strings.xml
-[ -e $Tmk ] && cat $HOME/.github/Language/$kvc | sed -e '/encoding=/d' -e "/resources>/d" >> $Tmk/strings.xml || cat $HOME/.github/Language/$kvc | sed "/<\/resources>/d" >> $Tmk/strings.xml
-echo '</resources>' >> $Tmk/strings.xml
-done
-
-#cat $HOME/tmp/patcher/apk/res/values-vi/strings.xml
-echo '- Quá trình ghép string xong' | tee 1.txt
-)
+ls YT-temporary-files/*.apk
+cp -rf YT-temporary-files/*.apk YT2.apk
 
 # Chờ xây dựng xong
-Loading "1.txt" "2.txt"
-if [ "$TYPE" == 'true' ]; then
+if [ "$TYPE" == 'true' ];then
+echo "Tạo rsign..."
+echo
 mv YT.apk $HOME/Tav/YouTube.apk
+cd tmp
+zip -qr $HOME/YT2.apk *
+cd $HOME
+rsign Tav/base.apk YT2.apk $HOME/Up/ZT-$VER-$ach${amoled2}-rsign.apk
 else
 apksign YT.apk $HOME/Up/YT-$VER-$ach${amoled2}.apk
 ls Up
@@ -249,7 +232,7 @@ echo '{
 "changelog": "https://github.com/'$GITHUB_REPOSITORY'/releases/download/Up/Up-K'$V'notes.json"
 }' > Up-K$V$ach$amoled2.json
 
-echo -e 'Update '$(date)' \nYouTube: '$VER' \nVersion: '${VER//./}' \nAuto by kakathic' > Up-K${V}notes.json
+echo -e 'Update '$(date)' \nYouTube: '$VER' \nVersion: '${VER//./}' \nAuto by chamchamfy' > Up-K${V}notes.json
 
 # Tạo module magisk
 cd $HOME/.github/Modun
