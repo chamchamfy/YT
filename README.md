@@ -1,6 +1,6 @@
 
 # YT-RE - YT-EXT 
-[![YT-RE](https://github.com/Zenlua/AT-YT/actions/workflows/Install.yml/badge.svg)](https://github.com/Zenlua/AT-YT/actions/workflows/Install.yml) [![YT-EXT](https://github.com/Zenlua/AT-YT/actions/workflows/XInstall.yml/badge.svg)](https://github.com/Zenlua/AT-YT/actions/workflows/XInstall.yml)
+[![YT-RE](https://github.com/chamchamfy/YT/actions/workflows/Install.yml/badge.svg)](https://github.com/chamchamfy/YT/actions/workflows/Install.yml) [![YT-EXT](https://github.com/chamchamfy/YT/actions/workflows/XInstall.yml/badge.svg)](https://github.com/chamchamfy/YT/actions/workflows/XInstall.yml)
 + Are two different types of YouTube mods, pay attention to the names when downloading
 
 + Build, Edit: is the manual build version
@@ -13,7 +13,7 @@
 ---
 
 > [!Tip]
-> All versions: [Release](https://github.com/Zenlua/AT-YT/releases)
+> All versions: [Release](https://github.com/chamchamfy/YT/releases)
 
 **Revanced CLI**
 ---
@@ -50,7 +50,7 @@
 
 - I don't know many languages, you can contribute languages ​​at the link below.
 
-   > [Language](https://github.com/Zenlua/AT-YT/tree/Vip/.github/Language)
+   > [Language](https://github.com/chamchamfy/YT/tree/Vip/.github/Language)
 
 - Or submit the language file to the issue.
 
