@@ -208,7 +208,7 @@ cd $HOME
 # Tạo module.prop
 echo 'id=YouTube
 name=YouTube Ext '$Kad'
-author=kakathic
+author=chamchamfy
 description=Build '$date', YouTube edited tool by Revanced mod added disable play store updates.
 version='$VER'
 versionCode='${VER//./}'
@@ -223,7 +223,7 @@ echo '{
 "changelog": "https://github.com/'$GITHUB_REPOSITORY'/releases/download/Up/Up-X'$V'notes.json"
 }' > "Up-X$V$ach$amoled2.json"
 
-echo -e 'Update '$date' \nYouTube: '$VER' \nVersion: '${VER//./}'\nAuto by kakathic' > Up-X${V}notes.json
+echo -e 'Update '$date' \nYouTube: '$VER' \nVersion: '${VER//./}'\nAuto by chamchamfy' > Up-X${V}notes.json
 
 # Tạo module magisk
 cd $HOME/.github/Modun
