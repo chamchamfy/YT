@@ -1,7 +1,6 @@
 # load dữ liệu 
 lib1="lib/revanced-cli.jar"
 lib2="lib/revanced-patches.jar"
-lib3="lib/revanced-integrations.apk"
 
 pbsta() {
 Vsion1="$(Xem https://github.com/inotia00/$1 | grep -om1 "inotia00/$1/releases/tag/.*\"" | sed -e 's|/v|/|g' -e 's|\"||g')"
@@ -54,6 +53,27 @@ lib="lib/arm64-v8a/* lib/x86/* lib/x86_64/*"
 ach="arm"
 fi
 
+echo
+# Tải tool cli
+echo "- Tải tool cli, patches, integrations..."
+if [ "$DEV" == "Develop" ]; then
+echo "  Dùng Dev"
+echo
+pbdev revanced-cli revanced-cli jar -all
+pbdev revanced-patches patches rvp
+
+else
+echo "  Dùng Sta"
+echo
+pbsta revanced-cli revanced-cli jar -all
+pbsta revanced-patches patches rvp
+fi
+
+# kiểm tra tải tool
+checkzip "$lib1"
+checkzip "$lib2"
+echo
+
 # lấy dữ liệu phiên bản mặc định
 Vidon=$(Xem https://raw.githubusercontent.com/inotia00/revanced-patches/revanced-extended/patches.json | jq -r .[1].compatiblePackages[] | sed -e '/\[/d; /\]/d; /^$/d' | tac | head -n1 | awk -F\" '{print $2}')
 echo "     $Vidon"
@@ -85,31 +105,6 @@ echo "! Là phiên bản mới nhất."
 #sleep 10
 #exit 0
 fi
-
-echo
-# Tải tool cli
-# Tải tool cli
-echo "- Tải tool cli, patches, integrations..."
-if [ "$DEV" == "Develop" ]; then
-echo "  Dùng Dev"
-echo
-pbdev revanced-cli revanced-cli jar -all
-pbdev revanced-patches patches rvp
-#pbdev revanced-patches-template patches rvp
-
-else
-echo "  Dùng Sta"
-echo
-pbsta revanced-cli revanced-cli jar -all
-pbsta revanced-patches patches rvp
-#pbsta revanced-patches-template patches rvp
-fi
-
-# kiểm tra tải tool
-checkzip "$lib1"
-checkzip "$lib2"
-#checkzip "$lib3"
-echo
 
 echo "- Tải YouTube $VER apk, apks..."
 # Tải YouTube apk
@@ -151,18 +146,16 @@ echo "- không có file apk2"
 fi
 
 
-if [ "$TYPE" == 'true' ]; then
+if [ "$TYPE" == 'true' ];then
 lib='lib/*/*'
-if [ -e apk/YouTube.apks ]; then
-unzip -qo apk/YouTube.apks 'base.apk' -d Tav
-unzip -qo apk/YouTube.apk lib/$DEVICE/* -d Tav
-mv -f Tav/lib/$DEVICE Tav/lib/$ach
+if [ -e apk/YouTube.apks ];then
+echo "- Giải nén base.apk"
+unzip -qo apk/YouTube.apks 'base.apk' "split_config.${DEVICE//-/_}.apk" split_config.xxhdpi.apk -d Tav   
 else
 echo "- Giải nén Lib"
 cp apk/YouTube.apk Tav/base.apk
-unzip -qo apk/YouTube.apk lib/$DEVICE/* -d Tav
-mv -f Tav/lib/$DEVICE Tav/lib/$ach
 fi
+unzip -qo apk/YouTube.apk lib/$DEVICE/* -d tmp
 fi
 
 # Copy 
@@ -187,28 +180,22 @@ cd $HOME
 fi
 
 # MOD YouTube 
-(
-#java -Djava.io.tmpdir=$HOME -jar $lib1 patch 2>&1
-
 echo "▼ Bắt đầu quá trình xây dựng..."
-eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 apk/YouTube.apk -o YT.apk "$Tof $Ton $Mro $theme $feature" --unsigned" >> Log2.txt 2>&1
-sed '/WARNING: warn: removing resource/d' Log2.txt
-echo '- Quá trình xây dựng apk xong.' | tee 2.txt
-grep 'SEVERE:' Log2.txt | sed 's|failed:|failed|g' > Log.txt
+eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 apk/YouTube.apk -o YT.apk "$Tof $Ton $Mro $theme $feature""
+echo '- Quá trình xây dựng apk xong.'
+echo
 
-) & (
+ls YT-temporary-files/*.apk
+cp -rf YT-temporary-files/*.apk YT2.apk
 
-sleep 5
-zip -qr apk/YouTube.apk -d res/* | tee bcdd.txt
-echo '- Quá trình xoá rác xong' | tee 1.txt
-
-)
-
-# Chờ xây dựng xong
-Loading "1.txt" "2.txt"
-
-if [ "$TYPE" == 'true' ]; then
+if [ "$TYPE" == 'true' ];then
+echo "Tạo rsign..."
+echo
 mv YT.apk $HOME/Tav/YouTube.apk
+cd tmp
+zip -qr $HOME/YT2.apk *
+cd $HOME
+rsign Tav/base.apk YT2.apk $HOME/Up/ZXT-$VER-$ach${amoled2}-rsign.apk
 else
 apksign YT.apk $HOME/Up/XYT-$VER-$ach${amoled2}.apk
 ls Up
@@ -222,7 +209,7 @@ cd $HOME
 echo 'id=YouTube
 name=YouTube Ext '$Kad'
 author=kakathic
-description=Build '$(date)', YouTube edited tool by Revanced mod added disable play store updates.
+description=Build '$date', YouTube edited tool by Revanced mod added disable play store updates.
 version='$VER'
 versionCode='${VER//./}'
 updateJson=https://github.com/'$GITHUB_REPOSITORY'/releases/download/Up/Up-X'$V$ach$amoled2'.json
@@ -236,7 +223,7 @@ echo '{
 "changelog": "https://github.com/'$GITHUB_REPOSITORY'/releases/download/Up/Up-X'$V'notes.json"
 }' > "Up-X$V$ach$amoled2.json"
 
-echo -e 'Update '$(date)' \nYouTube: '$VER' \nVersion: '${VER//./}'\nAuto by kakathic' > Up-X${V}notes.json
+echo -e 'Update '$date' \nYouTube: '$VER' \nVersion: '${VER//./}'\nAuto by kakathic' > Up-X${V}notes.json
 
 # Tạo module magisk
 cd $HOME/.github/Modun
