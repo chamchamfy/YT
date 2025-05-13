@@ -75,7 +75,7 @@ checkzip "$lib2"
 echo
 
 # lấy dữ liệu phiên bản mặc định
-Vidon=$(Xem https://raw.githubusercontent.com/inotia00/revanced-patches/revanced-extended/patches.json | jq -r .[1].compatiblePackages[] | grep '[1-9]",' | tac | head -n1 | awk -F\" '{print $2}')
+Vidon=$(curl -s https://raw.githubusercontent.com/inotia00/revanced-patches/revanced-extended/patches.json | jq -r .[1].compatiblePackages[] | grep '[1-9]"' | tac | head -n1 | awk -F\" '{print $2}')
 echo "     $Vidon"
 if [ "$VERSION" == 'New' ]; then
 VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}')
