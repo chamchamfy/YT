@@ -121,7 +121,9 @@ kkk1="google-inc/youtube/youtube-${VER//./-}-release/youtube-${VER//./-}-2-andro
 kkk2="google-inc/youtube/youtube-${VER//./-}-release/youtube-${VER//./-}-android-apk-download"
 
 # Tải
-TaiYT 'YouTube1' "$kkk1" & TaiYT 'YouTube2' "$kkk2"
+TaiYT 'YouTube1' "$kkk1" 
+sleep 1
+TaiYT 'YouTube2' "$kkk2"
 
 # Chờ tải xong
 Loading apk/YouTube1.txt apk/YouTube2.txt
