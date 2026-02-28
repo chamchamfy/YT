@@ -88,13 +88,13 @@ echo
 Vidon=$(curl -s https://raw.githubusercontent.com/ReVanced/revanced-patches/main/patches/src/main/kotlin/app/revanced/patches/youtube/ad/general/HideAdsPatch.kt | tr -d '[:alpha:]' | grep '[1-9]",' | tail -n1 | awk -F\" '{print $2}')
 echo "  $Vidon"
 if [ "$VERSION" == 'New' ]; then
-VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}')
+VER=$(curl -sLA "Mozilla/5.0" "https://www.apkmirror.com/apk/google-inc/youtube/feed/" | grep -m 1 -oP '(?<=YouTube )[\d.]+')
 [ -z "$VER" ] && VER=$Vidon
 Kad=Build$Vop
 V=V$Vop2
 elif [ "$VERSION" == 'Auto' ]; then
 VER=$Vidon
-[ -z "$Vidon" ] && VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}')
+[ -z "$Vidon" ] && VER=$(curl -sLA "Mozilla/5.0" "https://www.apkmirror.com/apk/google-inc/youtube/feed/" | grep -m 1 -oP '(?<=YouTube )[\d.]+')
 Kad=Auto$Vop
 V=U$Vop2
 else
