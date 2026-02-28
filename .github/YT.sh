@@ -32,6 +32,7 @@ TaiYT() {
 #urrl="https://www.apkmirror.com"
 #L1="$urrl$(curl -sL -A "$User" "$urrl/apk/$2" | grep -oP 'href="/apk/[^"]+download.php[^"]+"' | head -1)"
 #L2="$urrl$(curl -sL -A "$User" -e "$urrl/apk/$2" "$L1" | grep -oP 'href="/wp-content/themes/APKMirror/download\.php\?[^"]+"' | head -1)"
+pip install cloudscraper beautifulsoup4
 L2=$(python3 $HOME/.github/lyt.py "$VER")
 echo "Link: $L2"
 Taive "$L2" "apk/$1"
