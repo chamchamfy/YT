@@ -29,11 +29,12 @@ fi
 
 # tải apk
 TaiYT() {
-urrl="https://www.apkmirror.com"
-L1="$urrl$(curl -sL -A "$User" "$urrl/apk/$2" | grep -oP 'href="/apk/[^"]+download.php[^"]+"' | head -1)"
-L2="$urrl$(curl -sL -A "$User" -e "$urrl/apk/$2" "$L1" | grep -oP 'href="/wp-content/themes/APKMirror/download\.php\?[^"]+"' | head -1)"
+#urrl="https://www.apkmirror.com"
+#L1="$urrl$(curl -sL -A "$User" "$urrl/apk/$2" | grep -oP 'href="/apk/[^"]+download.php[^"]+"' | head -1)"
+#L2="$urrl$(curl -sL -A "$User" -e "$urrl/apk/$2" "$L1" | grep -oP 'href="/wp-content/themes/APKMirror/download\.php\?[^"]+"' | head -1)"
+L2=$(python3 lyt.py "$VER")
 echo "Link: $L2"
-curl -sL -A "$User" -e "$L1" "$L2" -o "apk/$1.apk"
+Taive "$L2" "apk/$1"
 file "apk/$1" | tee "apk/$1.txt";
 }
 
