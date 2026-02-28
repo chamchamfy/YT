@@ -30,10 +30,10 @@ fi
 # tải apk
 TaiYT() {
 urrl="https://www.apkmirror.com"
-uak1="$urrl$(Xem "$urrl/apk/$2" | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
-uak2="$urrl$(Xem "$uak1" | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
-Taive "$uak2" "apk/$1"
-echo "Link: $uak2"
+L1="$urrl$(curl -sL -A "$User" "$urrl/apk/$2" | grep -oP 'href="/apk/[^"]+download.php[^"]+"' | head -1)"
+L2="$urrl$(curl -sL -A "$User" -e "$urrl/apk/$2" "$L1" | grep -oP 'href="/wp-content/themes/APKMirror/download\.php\?[^"]+"' | head -1)"
+echo "Link: $L2"
+curl -sL -A "$UA" -e "$L1" "$L2" -o "apk/$1.apk"
 file "apk/$1" | tee "apk/$1.txt";
 }
 
