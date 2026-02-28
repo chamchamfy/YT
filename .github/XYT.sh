@@ -78,14 +78,12 @@ echo
 Vidon=$(curl -s https://raw.githubusercontent.com/inotia00/revanced-patches/revanced-extended/patches.json | jq -r .[1].compatiblePackages[] | grep '[1-9]"' | tac | head -n1 | awk -F\" '{print $2}')
 echo "     $Vidon"
 if [ "$VERSION" == 'New' ]; then
-VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}')
-[ -z "$VER" ] && VER=$Vidon
+VER=$(curl -sLA "Mozilla/5.0" "https://www.apkmirror.com/apk/google-inc/youtube/feed/" | grep -m 1 -oP '(?<=YouTube )[\d.]+')
 Kad=Build
 V=V
 elif [ "$VERSION" == 'Auto' ]; then
 VER=$Vidon
-[ -z "$Vidon" ] && VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube" | grep 'new in YouTube' | tr -d '[:alpha:]"><=/-' | awk -F"'" '{print $2}' | awk '{$1=$1}{print $1}')
-Kad=Auto
+[ -z "$Vidon" ] && VER=$(curl -sLA "Mozilla/5.0" "https://www.apkmirror.com/apk/google-inc/youtube/feed/" | grep -m 1 -oP '(?<=YouTube )[\d.]+')
 V=U
 else
 Vidon="$VERSION"
