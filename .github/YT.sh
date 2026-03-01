@@ -30,10 +30,13 @@ fi
 # tải apk
 TaiYT() {
 LT="https://www.apkmirror.com"
-L1="$LT$(Xem "$LT/apk/$2" | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
-L2="$LT$(Xem "$L1" | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
+#L1="$LT$(Xem "$LT/apk/$2" | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
+#L2="$LT$(Xem "$L1" | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
+L1="$LT$(wget -q -U "Mozilla/5.0 (Linux; Android 14; Mobile)" "$LT/apk/$2" -O - | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
+L2="$LT$(wget -q -U "Mozilla/5.0 (Linux; Android 14; Mobile)" "$L1" -O - | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
+wget -q -U "Mozilla/5.0 (Linux; Android 14; Mobile)" "$L2" -O "apk/$1"
 echo "Link: $L2"
-Taive "$L2" "apk/$1"
+#Taive "$L2" "apk/$1"
 file "apk/$1" | tee "apk/$1.txt";
 }
 
