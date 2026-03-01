@@ -6,7 +6,6 @@ sudo rm -rf /usr/local/share/boost
 
 HOME="$GITHUB_WORKSPACE"
 sudo apt install zipalign bash 2>/dev/null >/dev/null
-pip install cloudscraper beautifulsoup4
 cd $HOME
 
 date="$(TZ=Asia/Ho_Chi_Minh date +"%Y-%m-%d %H:%M:%S.%3N GMT%Z")"
