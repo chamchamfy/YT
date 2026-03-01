@@ -22,13 +22,15 @@ echo "- Url: https://github.com/inotia00/$1/releases/download/v${Vsion1##*/}/$2-
 
 # tải apk
 TaiYT() {
-urrl="https://www.apkmirror.com"
-uak1="$urrl$(Xem "$urrl/apk/$2" | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
-uak2="$urrl$(Xem "$uak1" | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
-Taive "$uak2" "apk/$1"
-echo "Link: $uak2"
+LT="https://www.apkmirror.com"
+#L1="$LT$(Xem "$LT/apk/$2" | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
+#L2="$LT$(Xem "$L1" | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
+L1="$LT$(wget -q -U "Mozilla/5.0 (Linux; Android 14; Mobile)" "$LT/apk/$2" -O - | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
+L2="$LT$(wget -q -U "Mozilla/5.0 (Linux; Android 14; Mobile)" "$L1" -O - | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
+wget -q -U "Mozilla/5.0 (Linux; Android 14; Mobile)" "$L2" -O "apk/$1"
+echo "Link: $L2"
+#Taive "$L2" "apk/$1"
 file "apk/$1" | tee "apk/$1.txt";
-#[ -n "$(hexdump -n 2 apk/$1 | grep '4b50')" ] && echo > "apk/$1.txt" || ( echo "! Lỗi $1" | tee "apk/$1.txt"; );
 }
 # Load dữ liệu cài đặt 
 . $HOME/.github/options/Ytx.md
