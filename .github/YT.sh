@@ -32,7 +32,13 @@ TaiYT() {
 #urrl="https://www.apkmirror.com"
 #L1="$urrl$(curl -sL -A "$User" "$urrl/apk/$2" | grep -oP 'href="/apk/[^"]+download.php[^"]+"' | head -1)"
 #L2="$urrl$(curl -sL -A "$User" -e "$urrl/apk/$2" "$L1" | grep -oP 'href="/wp-content/themes/APKMirror/download\.php\?[^"]+"' | head -1)"
-L2=$(curl -sL -A "Mozilla/5.0" "https://youtube.en.uptodown.com/android/versions" | grep -oP "https://youtube.en.uptodown.com/android/download/[0-9]+" | head -n 20 | xargs -I {} curl -sL {} -H "User-Agent: Mozilla/5.0" | grep -oP "https://dw.uptodown.com/dwn/[^\"]+" | head -n 1)
+ULV="https://apkpure.com/vn/youtube/com.google.android.youtube/versions"
+L1=$(curl -sL -A "Mozilla/5.0" "$ULV" | \
+    grep -oP "href=\"[^\"]+com\.google\.android\.youtube/download/$VER[^\"]*\"" | \
+    sed 's/href="//;s/"//' | head -n 1)
+L2=$(curl -sL -A "Mozilla/5.0" "$L1" | \
+    grep -oP 'https://d\.apkpure\.com/b/APK/com\.google\.android\.youtube\?version=[^"]*' | \
+    head -n 1)
 echo "Link: $L2"
 Taive "$L2" "apk/$1"
 file "apk/$1" | tee "apk/$1.txt";
