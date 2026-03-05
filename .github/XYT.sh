@@ -196,7 +196,7 @@ mv YT.apk $HOME/Tav/YouTube.apk
 cd tmp
 zip -qr $HOME/YT2.apk *
 cd $HOME
-rsign Tav/base.apk YT2.apk $HOME/Up/ZXT-$VER-$ach${amoled2}-rsign.apk
+rsign Tav/base.apk YT2.apk $HOME/Up/XYT-$VER-$ach${amoled2}-rsign.apk
 else
 apksign YT.apk $HOME/Up/XYT-$VER-$ach${amoled2}.apk
 ls Up
