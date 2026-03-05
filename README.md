@@ -1,6 +1,7 @@
 
-# YT-RE - YT-EXT 
+# YT-RE - YT-EXT - YT-MORPHE
 [![YT-RE](https://github.com/chamchamfy/YT/actions/workflows/Install.yml/badge.svg)](https://github.com/chamchamfy/YT/actions/workflows/Install.yml) [![YT-EXT](https://github.com/chamchamfy/YT/actions/workflows/XInstall.yml/badge.svg)](https://github.com/chamchamfy/YT/actions/workflows/XInstall.yml)
+[![YT-MORPHE](https://github.com/chamchamfy/YT/actions/workflows/MInstall.yml/badge.svg)](https://github.com/chamchamfy/YT/actions/workflows/MInstall.yml)
 
 Use for both non-root and root:
 
@@ -21,7 +22,7 @@ Use for both non-root and root:
 > **[![Downloads](https://img.shields.io/github/downloads/chamchamfy/YT/total?label=Downloads&logo=github&abbreviated=true&color=blue)](https://github.com/chamchamfy/YT/releases)**
 
 > [!note]
-> `ZT-rsign.apk | ZXT-rsign.apk` version is only installed when the device has corepatch installed.
+> `YT-rsign.apk | XYT-rsign.apk | MYT-resign.apk` version is only installed when the device has corepatch installed.
 
 **Revanced CLI**
 ---
@@ -34,7 +35,9 @@ Use for both non-root and root:
 
    > [Revanced](https://github.com/revanced/revanced-patches) | [Version](https://revanced.app/patches?s=YouTube)
 
+   
    > [inotia00](https://github.com/inotia00/revanced-patches)
+   > [morphe](https://github.com/MorpheApp/morphe-patches)
 
 - Additional app for the no-root version
 
