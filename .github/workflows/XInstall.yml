@@ -25,7 +25,7 @@ on:
           - Stable
           - Develop
       FEATURE:
-        description: 'Turn off feature'
+        description: 'Turn on/off feature on: [-e "feature"], off: [-d "feature"]'
         required: false
         default: ' -d "Custom branding YouTube name" -d "Custom branding icon Revancify red" -d "Custom branding icon MMT" -d "Custom branding icon Revancify blue" -d "Custom branding icon Revancify Blue" -d "Custom branding name YouTube" -d "Custom branding icon YouTube" -d "Custom branding name for YouTube" -d "Custom branding icon for YouTube" '
 permissions: write-all
