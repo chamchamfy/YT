@@ -1,6 +1,6 @@
 UA="Mozilla/5.0 (Linux; Android 14; Mobile)"
-Xem() { curl -sLA "$UA" --connect-timeout 20 "$1"; }
-Taive() { curl -sLkA "$UA" --connect-timeout 20 "$1" -o "$2"; }
+Xem() { curl -sLNG -A "$UA" --connect-timeout 20 "$1"; }
+Taive() { curl -sLk -A "$UA" --connect-timeout 20 "$1" -o "$2"; }
 # load dữ liệu 
 lib1="lib/revanced-cli.jar"
 lib2="lib/revanced-patches.jar"
@@ -61,13 +61,11 @@ echo
 echo "- Tải tool cli, patches, integrations..."
 if [ "$DEV" == "Develop" ]; then
 echo "  Dùng Dev"
-echo
 pbdev revanced-cli revanced-cli jar -all
 pbdev revanced-patches patches rvp
 
 else
 echo "  Dùng Sta"
-echo
 pbsta revanced-cli revanced-cli jar -all
 pbsta revanced-patches patches rvp
 fi
@@ -168,7 +166,7 @@ cp -rf $HOME/.github/Tools/sqlite3_$ach $HOME/.github/Modun/common/sqlite3
 echo "- Xoá lib thừa."
 zip -qr apk/YouTube.apk -d $lib
 
-# Xử lý revanced patches
+# Xử lý revanced extended patches
 if [ "$Vidon" != "$VER" ]; then
 echo "- Chuyển đổi phiên bản $VER"
 unzip -qo "$lib2" -d $HOME/jar
