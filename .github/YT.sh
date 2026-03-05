@@ -1,27 +1,26 @@
+UA="Mozilla/5.0 (Linux; Android 14; Mobile)"
+Xem() { curl -sLNG -A "$UA" --connect-timeout 20 "$1"; }
+Taive() { curl -sLk -A "$UA" --connect-timeout 20 "$1" -o "$2"; }
 
 # load dữ liệu 
 lib1="lib/revanced-cli.jar"
 lib2="lib/revanced-patches.jar"
-lib3="lib/revanced-patches-template.jar"
-# Tải tool sta
+# tải patch ổn định
 pbsta() {
-Vsion1="$(Xem https://github.com/ReVanced/$1 | grep -om1 "ReVanced/$1/releases/tag/.*\"" | sed -e 's|/v|/|g' -e 's|\"||g')"
-Taive "https://github.com/ReVanced/$1/releases/download/v${Vsion1##*/}/$2-${Vsion1##*/}$4.$3" "lib/$1.jar"; 
-
-echo "- Url: https://github.com/ReVanced/$1/releases/download/v${Vsion1##*/}/$2-${Vsion1##*/}$4.$3
-"
+PV1="$(Xem https://github.com/ReVanced/$1 | grep -om1 "ReVanced/$1/releases/tag/.*\"" | sed -e 's|/v|/|g' -e 's|\"||g')"
+PV2="https://github.com/ReVanced/$1/releases/download/v${PV1##*/}/$2-${PV1##*/}$4.$3"
+echo "- Url: $PV2"
+Taive "$PV2" "lib/$1.jar"; 
 }
- 
-# tải tool dev
+# tải patch dev
 pbdev() {
-Vsion1="$(Xem https://github.com/ReVanced/$1/releases | grep -om1 "ReVanced/$1/releases/tag/.*dev" | cut -d '"' -f1 | sed -e 's|/v|/|g' -e 's|\"||g')"
-Taive "https://github.com/ReVanced/$1/releases/download/v${Vsion1##*/}/$2-${Vsion1##*/}$4.$3" "lib/$1.jar"; 
-
-echo "- Url: https://github.com/ReVanced/$1/releases/download/v${Vsion1##*/}/$2-${Vsion1##*/}$4.$3
-"
+PV1="$(Xem https://github.com/ReVanced/$1/releases | grep -om1 "ReVanced/$1/releases/tag/.*dev" | cut -d '"' -f1 | sed -e 's|/v|/|g' -e 's|\"||g')"
+PV2="https://github.com/ReVanced/$1/releases/download/v${PV1##*/}/$2-${PV1##*/}$4.$3"
+echo "- Url: $PV2"
+Taive "$PV2" "lib/$1.jar"; 
 }
 
-# Tải json
+# tải json
 if [ "$DEV" == "Develop" ]; then
 Vop='-DEV'
 Vop2=D
@@ -30,18 +29,19 @@ fi
 # tải apk
 TaiYT() {
 LT="https://www.apkmirror.com"
+L1="$LT$(wget -q -U "$UA" "$LT/apk/$2" -O - | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
+L2="$LT$(wget -q -U "$UA" "$L1" -O - | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
+wget -q -U "$UA" "$L2" -O "apk/$1"
 #L1="$LT$(Xem "$LT/apk/$2" | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
 #L2="$LT$(Xem "$L1" | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
-L1="$LT$(wget -q -U "Mozilla/5.0 (Linux; Android 14; Mobile)" "$LT/apk/$2" -O - | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
-L2="$LT$(wget -q -U "Mozilla/5.0 (Linux; Android 14; Mobile)" "$L1" -O - | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
-wget -q -U "Mozilla/5.0 (Linux; Android 14; Mobile)" "$L2" -O "apk/$1"
-echo "Link: $L2"
 #Taive "$L2" "apk/$1"
+echo "Link: $L2"
 file "apk/$1" | tee "apk/$1.txt";
 }
 
-# Load dữ liệu cài đặt 
-. $HOME/.github/options/YouTube.md
+# Load dữ liệu cài đặt: . $HOME/.github/
+#Ton=' -e "feature"'
+Tof='-d "Custom branding"'
 
 # là amoled
 [ "$AMOLED" == 'true' ] && amoled2='-Amoled'
@@ -68,36 +68,30 @@ echo
 echo "- Tải tool cli, patches, integrations..."
 if [ "$DEV" == "Develop" ]; then
 echo "  Dùng Dev"
-echo
 pbdev revanced-cli revanced-cli jar -all
 pbdev revanced-patches patches rvp
-pbdev revanced-patches-template patches rvp
-
 else
 echo "  Dùng Sta"
-echo
 pbsta revanced-cli revanced-cli jar -all
 pbsta revanced-patches patches rvp
-pbsta revanced-patches-template patches rvp
 fi
 
 # kiểm tra tải tool
 checkzip "$lib1"
 checkzip "$lib2"
-checkzip "$lib3"
 echo
 
 # kiểm tra phiên bản 
-Vidon=$(curl -s https://raw.githubusercontent.com/ReVanced/revanced-patches/main/patches/src/main/kotlin/app/revanced/patches/youtube/ad/general/HideAdsPatch.kt | tr -d '[:alpha:]' | grep '[1-9]",' | tail -n1 | awk -F\" '{print $2}')
+Vidon=$(Xem https://raw.githubusercontent.com/ReVanced/revanced-patches/main/patches/src/main/kotlin/app/revanced/patches/youtube/ad/general/HideAdsPatch.kt | awk -F'"' '/com.google.android.youtube/,/\)/ { print $2 }' | grep -E '^[0-9.]+$' | tail -n1)
 echo "  $Vidon"
 if [ "$VERSION" == 'New' ]; then
-VER=$(curl -sLA "Mozilla/5.0" "https://www.apkmirror.com/apk/google-inc/youtube/feed/" | grep -m 1 -oP '(?<=YouTube )[\d.]+')
+VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube/feed/" | grep -m 1 -oP '(?<=YouTube )[\d.]+')
 [ -z "$VER" ] && VER=$Vidon
 Kad=Build$Vop
 V=V$Vop2
 elif [ "$VERSION" == 'Auto' ]; then
 VER=$Vidon
-[ -z "$Vidon" ] && VER=$(curl -sLA "Mozilla/5.0" "https://www.apkmirror.com/apk/google-inc/youtube/feed/" | grep -m 1 -oP '(?<=YouTube )[\d.]+')
+[ -z "$Vidon" ] && VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube/feed/" | grep -m 1 -oP '(?<=YouTube )[\d.]+')
 Kad=Auto$Vop
 V=U$Vop2
 else
