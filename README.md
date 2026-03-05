@@ -37,6 +37,8 @@ Use for both non-root and root:
 
    
    > [inotia00](https://github.com/inotia00/revanced-patches)
+   
+    
    > [morphe](https://github.com/MorpheApp/morphe-patches)
 
 - Additional app for the no-root version
