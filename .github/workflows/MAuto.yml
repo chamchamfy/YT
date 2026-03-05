@@ -1,0 +1,70 @@
+name: MORPHE-AUTO
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/MAuto.yml'
+      - '.github/MYT.sh'
+  schedule:
+    - cron: '0 0 * * 6'
+
+permissions: write-all
+
+env:
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  build:
+    name: Build ${{ matrix.device }} ${{ matrix.type == 'true' && 'root' || 'no-root' }}
+    if: github.repository == 'chamchamfy/YT' && github.ref == 'refs/heads/Vip'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - device: 'arm64-v8a'
+            type: 'true'
+          - device: 'arm64-v8a'
+            type: 'false'
+          - device: 'armeabi-v7a'
+            type: 'true'
+          - device: 'armeabi-v7a'
+            type: 'false'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
+      - name: See build
+        run: |
+          if [ -z "$VERSION" ]; then
+            DEVICE='${{ matrix.device }}'
+            DEV='Stable'
+            VERSION='Auto'
+            TYPE='${{ matrix.type }}'
+            AMOLED='true'
+          fi
+          . .github/install.sh
+          . .github/MYT.sh
+
+      - name: Upload File
+        uses: softprops/action-gh-release@v2
+        with:
+          name: YT-MORPHE ${{ env.VER }} ${{ env.Kad }}
+          tag_name: M${{ env.V }}${{ env.VER }}
+          files: Up/*
+          body: "${{ env.BODY }}"
+
+      - name: Upload Json
+        if: matrix.type == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Update
+          tag_name: Up
+          files: Up*.json
+          prerelease: true
