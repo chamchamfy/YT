@@ -44,15 +44,19 @@ Tof=' -d "Custom branding" -d "Custom branding icon YouTube" -d "Custom branding
 # Xoá lib dựa vào abi
 if [ "$DEVICE" == "arm64-v8a" ]; then
 lib="lib/x86/* lib/x86_64/* lib/armeabi-v7a/*"
+libm="*x86* *x86_64* *armeabi_v7a*"
 ach="arm64"
 elif [ "$DEVICE" == "x86" ]; then
 lib="lib/x86_64/* lib/arm64-v8a/* lib/armeabi-v7a/*"
+libm="*x86_64* *arm64-v8a* *armeabi-v7a*"
 ach="x86"
 elif [ "$DEVICE" == "x86_64" ]; then
 lib="lib/x86/* lib/arm64-v8a/* lib/armeabi-v7a/*"
+libm="*x86* *arm64-v8a* *armeabi-v7a*"
 ach="x64"
 else
 lib="lib/arm64-v8a/* lib/x86/* lib/x86_64/*"
+libm="*arm64-v8a* *x86* *x86_64*"
 ach="arm"
 fi
 
@@ -164,9 +168,11 @@ cp -rf $HOME/.github/Tools/sqlite3_$ach $HOME/.github/Modun/common/sqlite3
 
 if [ -f apk/YouTube.apk ]; then 
 echo "- Xoá lib thừa."
-zip -qr apk/YouTube.apk -d $lib
 tapk='apk/YouTube.apk'
-else tapk='apk/YouTube.apkm'
+zip -qr $tapk -d $lib
+else 
+tapk='apk/YouTube.apkm'
+zip -qr $tapk -d $libm
 fi
 
 # Xử lý morphe patches
@@ -194,12 +200,10 @@ cp -rf YT-temporary-files/*.apk YT2.apk
 
 if [ "$TYPE" == 'true' ]; then
 echo "Tạo rsign..."
-echo
 mv YT.apk $HOME/Tav/YouTube.apk
-cd tmp
-zip -qr $HOME/YT2.apk *
+[ -e tmp ] && cd tmp && zip -qr $HOME/YT2.apk *
 cd $HOME
-rsign Tav/base.apk YT2.apk $HOME/Up/MYT-$VER-$ach${amoled2}-rsign.apk
+[ -f Tav/base.apk ] && rsign Tav/base.apk YT2.apk $HOME/Up/MYT-$VER-$ach${amoled2}-rsign.apk || apkeditor b -t sig -i YT2.apk -sig "tmp/signatures_dir" -o "$HOME/Up/MYT-$VER-$ach${amoled2}-rsign.apk" &>/dev/null
 else
 apksign YT.apk $HOME/Up/MYT-$VER-$ach${amoled2}.apk
 ls Up
