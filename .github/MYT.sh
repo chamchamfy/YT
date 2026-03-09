@@ -122,41 +122,34 @@ Loading apk/YouTube1.txt apk/YouTube2.txt
 [ -z "$(hexdump -n 2 apk/YouTube1 | grep '4b50')" ] && rm -rf apk/YouTube1
 [ -z "$(hexdump -n 2 apk/YouTube2 | grep '4b50')" ] && rm -rf apk/YouTube2
 
-if [ -e apk/YouTube1 ]; then
-if [ "$(unzip -l apk/YouTube1 | grep -cm1 'base.apk')" == 1 ]; then
-echo "- apk1 thành apks."
-mv apk/YouTube1 apk/YouTube.apks
-else
-echo "- apk1 thành apk."
-mv apk/YouTube1 apk/YouTube.apk
-fi
+if [ -f apk/YouTube1 ]; then
+ if [ "$(unzip -l apk/YouTube1 | grep -cm1 'base.apk')" == 1 ]; then
+ echo "- apk1 thành apks."
+ mv apk/YouTube1 apk/YouTube.apks
+ else 
+ echo "- apk1 thành apk."
+ mv apk/YouTube1 apk/YouTube.apk
+ fi
 else
 echo "- không có file apk1"
 fi
 
-if [ -e apk/YouTube2 ]; then
-if [ "$(unzip -l apk/YouTube2 | grep -cm1 'base.apk')" == 1 ]; then
-echo "- apk2 thành apks."
-mv apk/YouTube2 apk/YouTube.apks
-else
-echo "- apk2 thành apk."
-mv apk/YouTube2 apk/YouTube.apk
-fi
+if [ -f apk/YouTube2 ]; then
+ if [ "$(unzip -l apk/YouTube2 | grep -cm1 'base.apk')" == 1 ]; then
+ echo "- apk2 thành apks."
+ mv apk/YouTube2 apk/YouTube.apks
+ else
+ echo "- apk2 thành apk."
+ mv apk/YouTube2 apk/YouTube.apk
+ fi
 else
 echo "- không có file apk2"
 fi
 
 
-if [ "$TYPE" == 'true' ];then
-lib='lib/*/*'
-if [ -e apk/YouTube.apks ];then
-echo "- Giải nén base.apk"
-unzip -qo apk/YouTube.apks 'base.apk' "split_config.${DEVICE//-/_}.apk" split_config.xxhdpi.apk -d Tav   
-else
-echo "- Giải nén Lib"
-cp apk/YouTube.apk Tav/base.apk
-fi
-unzip -qo apk/YouTube.apk lib/$DEVICE/* -d tmp
+if [ "$TYPE" == 'true' ]; then
+[ -f apk/YouTube.apks ] && echo "- Giải nén base.apk" && unzip -qo apk/YouTube.apks 'base.apk' "split_config.${DEVICE//-/_}.apk" split_config.xxhdpi.apk -d Tav
+[ -f apk/YouTube.apk ] && echo "- Giải nén Lib" && cp apk/YouTube.apk Tav/base.apk && unzip -qo apk/YouTube.apk lib/$DEVICE/* -d tmp
 fi
 
 # Copy 
@@ -189,7 +182,7 @@ echo
 ls YT-temporary-files/*.apk
 cp -rf YT-temporary-files/*.apk YT2.apk
 
-if [ "$TYPE" == 'true' ];then
+if [ "$TYPE" == 'true' ]; then
 echo "Tạo rsign..."
 echo
 mv YT.apk $HOME/Tav/YouTube.apk
