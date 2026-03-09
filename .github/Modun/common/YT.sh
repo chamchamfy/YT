@@ -2,29 +2,29 @@
 
 linkAPK(){ find /data/app | grep com.google.android.youtube | grep -m1 'base.apk'; }
 
-checkYT(){ 
-Tkvi="$(linkAPK)";
-[ -f "$Tkvi" ] && umount -l "$Tkvi" &>/dev/null;
-[ -d "${Tkvi%/*}" ] && umount -l "${Tkvi%/*}" &>/dev/null;
+checkYT(){
+for vv in $(find /data/app -maxdepth 2 -type d | grep com.google.android.youtube); do
+umount -l "$vv" &>/dev/null;
+rm -fr "$vv"
+done
 [ -d "/data/YouTube/tmp" ] && umount -l /data/YouTube/tmp &>/dev/null;
-rm -fr $MODPATH/YouTube/*; }
+}
 
 installYT(){
 chcon u:object_r:apk_data_file:s0 $MODPATH/*.apk
 patpk="$(ls -1 $MODPATH/*.apk | sed '/YouTube.apk/d')"
 [ $(pm install -r $patpk | grep -cm1 'Success') == 1 ] && inYT="done" || inYT="failure"
-[ "$inYT" == "done" ] && pm clear com.google.android.youtube &>/dev/null
 [ "$inYT" == "failure" ] && pm uninstall com.google.android.youtube &>/dev/null
 [ $(pm install -r $patpk | grep -cm1 'Success') == 1 ] && inYT="done" || inYT="failure"
 [ "$inYT" == "done" ] || echo "- Error cannot install apk"; }
 
 mountYT(){
 if [ -d "${2%/*}" ];then
-cp -acf "${2%/*}"/* "$MODPATH/YouTube";
-mount -t tmpfs YouTube "${2%/*}";
-cp -acf "$MODPATH/YouTube.apk" "$MODPATH/YouTube/base.apk";
-cp -acf "$MODPATH/YouTube"/* "${2%/*}";
-chcon u:object_r:apk_data_file:s0 "$2";
+cp -af "${2%/*}"/* "$MODPATH/YouTube";
+mount -t tmpfs -o size=200m YouTube "${2%/*}";
+cp -af "$MODPATH/YouTube.apk" "$MODPATH/YouTube/base.apk";
+mv $MODPATH/YouTube/* "${2%/*}";
+chcon u:object_r:apk_data_file:s0 "${2%/*}"/*.apk;
 fi; }
 
 offCH(){
@@ -39,4 +39,5 @@ pm disable $PS &>/dev/null
 $Sqlite3 $LDB "UPDATE ownership SET doc_type = '25' WHERE doc_id = '$PK'";
 $Sqlite3 $LADB "UPDATE appstate SET auto_update = '2' WHERE package_name = '$PK'";
 rm -rf /data/data/$PS/cache/*
+am force-stop $PK &>/dev/null
 pm enable $PS &>/dev/null; }
