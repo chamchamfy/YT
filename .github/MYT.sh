@@ -201,7 +201,7 @@ cp -rf YT-temporary-files/*.apk YT2.apk
 if [ "$TYPE" == 'true' ]; then
 echo "Tạo rsign..."
 mv YT.apk $HOME/Tav/YouTube.apk
-[ -e tmp ] && cd tmp && zip -qr $HOME/YT2.apk *
+[ "$(ls -A tmp 2>/dev/null)" ] && cd tmp && zip -qr $HOME/YT2.apk *
 cd $HOME
 [ -f Tav/base.apk ] && rsign Tav/base.apk YT2.apk $HOME/Up/MYT-$VER-$ach${amoled2}-rsign.apk || apkeditor b -t sig -i YT2.apk -sig "tmp/signatures_dir" -o "$HOME/Up/MYT-$VER-$ach${amoled2}-rsign.apk" &>/dev/null
 else
