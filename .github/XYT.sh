@@ -44,15 +44,19 @@ Tof=' -d "Custom branding YouTube name" -d "Custom branding icon Revancify red" 
 # Xoá lib dựa vào abi
 if [ "$DEVICE" == "arm64-v8a" ]; then
 lib="lib/x86/* lib/x86_64/* lib/armeabi-v7a/*"
+libm="*x86* *x86_64* *armeabi_v7a*"
 ach="arm64"
 elif [ "$DEVICE" == "x86" ]; then
 lib="lib/x86_64/* lib/arm64-v8a/* lib/armeabi-v7a/*"
+libm="*x86_64* *arm64-v8a* *armeabi-v7a*"
 ach="x86"
 elif [ "$DEVICE" == "x86_64" ]; then
 lib="lib/x86/* lib/arm64-v8a/* lib/armeabi-v7a/*"
+libm="*x86* *arm64-v8a* *armeabi-v7a*"
 ach="x64"
 else
 lib="lib/arm64-v8a/* lib/x86/* lib/x86_64/*"
+libm="*arm64-v8a* *x86* *x86_64*"
 ach="arm"
 fi
 
@@ -122,49 +126,54 @@ Loading apk/YouTube1.txt apk/YouTube2.txt
 [ -z "$(hexdump -n 2 apk/YouTube1 | grep '4b50')" ] && rm -rf apk/YouTube1
 [ -z "$(hexdump -n 2 apk/YouTube2 | grep '4b50')" ] && rm -rf apk/YouTube2
 
-if [ -e apk/YouTube1 ]; then
-if [ "$(unzip -l apk/YouTube1 | grep -cm1 'base.apk')" == 1 ]; then
-echo "- apk1 thành apks."
-mv apk/YouTube1 apk/YouTube.apks
-else
-echo "- apk1 thành apk."
-mv apk/YouTube1 apk/YouTube.apk
-fi
+if [ -f apk/YouTube1 ]; then
+ if [ "$(unzip -l apk/YouTube1 | grep -cm1 'base.apk')" == 1 ]; then
+ echo "- apk1 thành apkm."
+ mv apk/YouTube1 apk/YouTube.apkm
+ else 
+ echo "- apk1 thành apk."
+ mv apk/YouTube1 apk/YouTube.apk
+ fi
 else
 echo "- không có file apk1"
 fi
 
-if [ -e apk/YouTube2 ]; then
-if [ "$(unzip -l apk/YouTube2 | grep -cm1 'base.apk')" == 1 ]; then
-echo "- apk2 thành apks."
-mv apk/YouTube2 apk/YouTube.apks
-else
-echo "- apk2 thành apk."
-mv apk/YouTube2 apk/YouTube.apk
-fi
+if [ -f apk/YouTube2 ]; then
+ if [ "$(unzip -l apk/YouTube2 | grep -cm1 'base.apk')" == 1 ]; then
+ echo "- apk2 thành apkm."
+ mv apk/YouTube2 apk/YouTube.apkm
+ else
+ echo "- apk2 thành apk."
+ mv apk/YouTube2 apk/YouTube.apk
+ fi
 else
 echo "- không có file apk2"
 fi
 
-
-if [ "$TYPE" == 'true' ];then
-lib='lib/*/*'
-if [ -e apk/YouTube.apks ];then
-echo "- Giải nén base.apk"
-unzip -qo apk/YouTube.apks 'base.apk' "split_config.${DEVICE//-/_}.apk" split_config.xxhdpi.apk -d Tav   
-else
-echo "- Giải nén Lib"
-cp apk/YouTube.apk Tav/base.apk
-fi
-unzip -qo apk/YouTube.apk lib/$DEVICE/* -d tmp
+if [ "$TYPE" == 'true' ]; then
+ if [ -f apk/YouTube.apk ]; then 
+ echo "- Giải nén Lib" 
+ cp apk/YouTube.apk Tav/base.apk 
+ unzip -qo apk/YouTube.apk lib/$DEVICE/* -d tmp
+ fi
+ if [ -f apk/YouTube.apkm ]; then 
+ echo "- Giải nén base.apk" 
+ unzip -qo apk/YouTube.apkm 'base.apk' "split_config.${DEVICE//-/_}.apk" split_config.xxhdpi.apk split_config.vi.apk -d Tav
+ fi
 fi
 
 # Copy 
 echo > $HOME/.github/Modun/common/$ach
 cp -rf $HOME/.github/Tools/sqlite3_$ach $HOME/.github/Modun/common/sqlite3
 
+if [ -f apk/YouTube.apk ]; then 
 echo "- Xoá lib thừa."
-zip -qr apk/YouTube.apk -d $lib
+tapk='apk/YouTube.apk'
+zip -qr $tapk -d $lib
+else 
+tapk='apk/YouTube.apkm'
+zip -qr $tapk -d $libm
+fi
 
 # Xử lý revanced extended patches
 if [ "$Vidon" != "$VER" ]; then
@@ -189,19 +198,18 @@ echo
 ls YT-temporary-files/*.apk
 cp -rf YT-temporary-files/*.apk YT2.apk
 
-if [ "$TYPE" == 'true' ];then
+if [ "$TYPE" == 'true' ]; then
 echo "Tạo rsign..."
-echo
 mv YT.apk $HOME/Tav/YouTube.apk
-cd tmp
-zip -qr $HOME/YT2.apk *
+[ "$(ls -A tmp 2>/dev/null)" ] && cd tmp && zip -qr $HOME/YT2.apk *
 cd $HOME
-rsign Tav/base.apk YT2.apk $HOME/Up/XYT-$VER-$ach${amoled2}-rsign.apk
+[ -f Tav/base.apk ] && rsign Tav/base.apk YT2.apk $HOME/Up/XYT-$VER-$ach${amoled2}-rsign.apk || apkeditor b -t sig -i YT2.apk -sig "tmp/signatures_dir" -o "$HOME/Up/XYT-$VER-$ach${amoled2}-rsign.apk" &>/dev/null
 else
 apksign YT.apk $HOME/Up/XYT-$VER-$ach${amoled2}.apk
 ls Up
 exit 0
 fi
+
 cd Tav
 tar -cf - * | xz -9kz > $HOME/.github/Modun/common/lib.tar.xz
 cd $HOME
