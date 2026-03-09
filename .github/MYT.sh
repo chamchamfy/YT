@@ -124,8 +124,8 @@ Loading apk/YouTube1.txt apk/YouTube2.txt
 
 if [ -f apk/YouTube1 ]; then
  if [ "$(unzip -l apk/YouTube1 | grep -cm1 'base.apk')" == 1 ]; then
- echo "- apk1 thành apks."
- mv apk/YouTube1 apk/YouTube.apks
+ echo "- apk1 thành apkm."
+ mv apk/YouTube1 apk/YouTube.apkm
  else 
  echo "- apk1 thành apk."
  mv apk/YouTube1 apk/YouTube.apk
@@ -136,8 +136,8 @@ fi
 
 if [ -f apk/YouTube2 ]; then
  if [ "$(unzip -l apk/YouTube2 | grep -cm1 'base.apk')" == 1 ]; then
- echo "- apk2 thành apks."
- mv apk/YouTube2 apk/YouTube.apks
+ echo "- apk2 thành apkm."
+ mv apk/YouTube2 apk/YouTube.apkm
  else
  echo "- apk2 thành apk."
  mv apk/YouTube2 apk/YouTube.apk
@@ -146,18 +146,28 @@ else
 echo "- không có file apk2"
 fi
 
-
 if [ "$TYPE" == 'true' ]; then
-[ -f apk/YouTube.apks ] && echo "- Giải nén base.apk" && unzip -qo apk/YouTube.apks 'base.apk' "split_config.${DEVICE//-/_}.apk" split_config.xxhdpi.apk -d Tav
-[ -f apk/YouTube.apk ] && echo "- Giải nén Lib" && cp apk/YouTube.apk Tav/base.apk && unzip -qo apk/YouTube.apk lib/$DEVICE/* -d tmp
+ if [ -f apk/YouTube.apk ]; then 
+ echo "- Giải nén Lib" 
+ cp apk/YouTube.apk Tav/base.apk 
+ unzip -qo apk/YouTube.apk lib/$DEVICE/* -d tmp
+ fi
+ if [ -f apk/YouTube.apkm ]; then 
+ echo "- Giải nén base.apk" 
+ unzip -qo apk/YouTube.apkm 'base.apk' "split_config.${DEVICE//-/_}.apk" split_config.xxhdpi.apk split_config.vi.apk -d Tav
+ fi
 fi
 
 # Copy 
 echo > $HOME/.github/Modun/common/$ach
 cp -rf $HOME/.github/Tools/sqlite3_$ach $HOME/.github/Modun/common/sqlite3
 
+if [ -f apk/YouTube.apk ]; then 
 echo "- Xoá lib thừa."
 zip -qr apk/YouTube.apk -d $lib
+tapk='apk/YouTube.apk'
+else tapk='apk/YouTube.apkm'
+fi
 
 # Xử lý morphe patches
 if [ "$Vidon" != "$VER" ]; then
@@ -175,7 +185,7 @@ fi
 
 # MOD YouTube 
 echo "▼ Bắt đầu quá trình xây dựng..."
-eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 apk/YouTube.apk -o YT.apk "$Tof $Ton $Mro $theme $feature""
+eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 $tapk -o YT.apk "$Tof $Ton $Mro $theme $feature""
 echo '- Quá trình xây dựng apk xong.'
 echo
 
@@ -195,8 +205,8 @@ apksign YT.apk $HOME/Up/MYT-$VER-$ach${amoled2}.apk
 ls Up
 exit 0
 fi
-cd Tav
-tar -cf - * | xz -9kz > $HOME/.github/Modun/common/lib.tar.xz
+
+cd Tav && tar -cf - * | xz -9kz > $HOME/.github/Modun/common/lib.tar.xz
 cd $HOME
 
 # Tạo module.prop
