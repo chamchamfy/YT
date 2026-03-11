@@ -22,7 +22,7 @@ Use for both non-root and root:
 > **[![Downloads](https://img.shields.io/github/downloads/chamchamfy/YT/total?label=Downloads&logo=github&abbreviated=true&color=blue)](https://github.com/chamchamfy/YT/releases)**
 
 > [!note]
-> `YT-rsign.apk | XYT-rsign.apk | MYT-resign.apk` version is only installed when the device has corepatch installed.
+> `YT-rsign.apk | XYT-rsign.apk | MYT-rsign.apk` version is only installed when the device has corepatch installed.
 
 **Revanced CLI**
 ---
