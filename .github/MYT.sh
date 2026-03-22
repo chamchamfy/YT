@@ -1,6 +1,6 @@
 UA="Mozilla/5.0 (Linux; Android 14; Mobile)"
 Xem() { curl -sLNG -A "$UA" --connect-timeout 20 "$1"; }
-Taive() { curl -sLk -A "$UA" --connect-timeout 20 "$1" -o "$2"; }
+Taive() { curl -sL -A "$UA" --connect-timeout 20 "$1" -o "$2"; }
 # load dữ liệu 
 lib1="lib/morphe-cli.jar"
 lib2="lib/morphe-patches.jar"
