@@ -9,8 +9,8 @@ pbsta() {
 PV1=$(Xem https://github.com/MorpheApp/$1 | grep -om1 "MorpheApp/$1/releases/tag/.*\"" | sed -e 's|/v|/|g' -e 's|\"||g')
 PV2="https://github.com/MorpheApp/$1/releases/download/v${PV1##*/}/$2-${PV1##*/}$4.$3"
 echo "-Url: $PV2"
-#Taive "$PV2" "lib/$1.jar";
-wget -q -U "$UA" "$PV2" -O "lib/$1.jar"
+Taive "$PV2" "lib/$1.jar";
+#wget -q -U "$UA" "$PV2" -O "lib/$1.jar"
 }
 # tải patch dev
 pbdev() {
@@ -76,8 +76,8 @@ pbsta morphe-patches patches mpp
 fi
 
 # kiểm tra tải tool
-checkzip "$lib1"
-checkzip "$lib2"
+#checkzip "$lib1"
+#checkzip "$lib2"
 echo
 
 # lấy dữ liệu phiên bản mặc định
