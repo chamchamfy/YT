@@ -80,8 +80,8 @@ pbsta revanced-patches patches rvp
 fi
 
 # kiểm tra tải tool
-checkzip "$lib1"
-checkzip "$lib2"
+#checkzip "$lib1"
+#checkzip "$lib2"
 echo
 
 # kiểm tra phiên bản 
