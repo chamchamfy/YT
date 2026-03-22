@@ -34,12 +34,12 @@ file "apk/$1" | tee "apk/$1.txt";
 
 # Load dữ liệu cài đặt: . $HOME/.github/
 #Ton=' -e "feature"'
-Tof=' -d "Custom branding" -d "Custom branding icon YouTube" -d "Custom branding icon for YouTube" '
+Tof=' -e "Disable Play Store updates" -e "Hide ads" -e "Copy video URL" -e "Double tap to seek" -e "Downloads" -e "Loop video" -e "Reload video" -e "Seekbar" -e "Swipe controls" -e "Change header" -e "Navigation bar" -e "Captions" -e "Ambient mode" -e "Miniplayer" -e "Exit fullscreen mode" -e "Open videos fullscreen" -e "Custom player overlay opacity" -e "Return YouTube Dislike" -e "Open Shorts in regular player" -e "SponsorBlock" -e "Spoof app version" -e "Alternative thumbnails" -e "Bypass image region restrictions" -e "Spoof device dimensions" -e "Bypass URL redirects" -e "Open links externally" -e "Sanitize sharing links" -e "Open system share sheet" -e "Video quality" -e "Playback speed" -e "Change start page" -d "Custom branding" -d "Video ads" -d "Override YouTube Music actions" -d "Shorts autoplay" -d "Disable layout updates" -d "Change form factor" '
 
 # là amoled
 [ "$AMOLED" == 'true' ] && amoled2='-Amoled'
-[ "$AMOLED" == 'true' ] || theme='-d Theme'
-[ "$TYPE" == 'true' ] && Mro='-d "GmsCore support"'
+[ "$AMOLED" == 'true' ] && theme='-e "Theme"' || theme='-d "Theme"'
+[ "$TYPE" == 'true' ] && Mro='-d "GmsCore support" -d "Change package name"' || Mro='-e "GmsCore support" -e "Change package name"'
 
 # Xoá lib dựa vào abi
 if [ "$DEVICE" == "arm64-v8a" ]; then
