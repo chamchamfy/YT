@@ -119,7 +119,7 @@ fi
 echo "- Tải YouTube $VER apk, apks..."
 # Tải YouTube apk
 
-for v in 0 -2; do 
+for v in 0 -2 -4 -3; do 
  [ -f apk/YouTube.apkm -a -f apk/YouTube.apk ] && echo " - Đã tải apk và apkm" && break
  [ "$v" = "0" ] && v=${v//0/}
  yt="google-inc/youtube/youtube-${VER//./-}-release/youtube-${VER//./-}${v}-android-apk-download"
@@ -127,8 +127,10 @@ for v in 0 -2; do
  find apk/ -type f -empty -delete
  taiyt "YouTube$v" "$yt"
  if [ -n "$(hexdump -n 2 "apk/YouTube$v" | grep '4b50')" ]; then
-  if [ -n "$(unzip -l "apk/YouTube$v" | grep 'base.apk')" ]; then mv -f apk/YouTube$v apk/YouTube.apkm && echo " - Xong .apkm";
-  elif [ -n "$(unzip -l "apk/YouTube$v" | grep 'resources.arsc')" ]; then mv -f apk/YouTube$v apk/YouTube.apk && echo " - Xong .apk"; 
+  if [ -n "$(unzip -l "apk/YouTube$v" | grep 'base.apk')" ]; then 
+  mv -f apk/YouTube$v apk/YouTube.apkm && echo " - Xong .apkm";
+  elif [ -n "$(unzip -l "apk/YouTube$v" | grep 'resources.arsc')" ]; then 
+  mv -f apk/YouTube$v apk/YouTube.apk && echo " - Xong .apk"; 
   fi 
  else 
   rm -f apk/YouTube$v
