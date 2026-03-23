@@ -1,7 +1,7 @@
 #!/bin/bash -x
 UA="Mozilla/5.0 (Linux; Android 14; Mobile)"
 Xem() { curl -sLNG -A "$UA" --connect-timeout 20 "$1"; }
-Taive() { curl -sLk -A "$UA" --connect-timeout 20 "$1" -o "$2"; }
+Taive() { curl -sL -A "$UA" --connect-timeout 20 "$1" -o "$2"; }
 
 # load dữ liệu 
 lib1="lib/revanced-cli.jar"
@@ -81,8 +81,8 @@ pbsta revanced-patches patches rvp
 fi
 
 # kiểm tra tải tool
-#checkzip "$lib1"
-#checkzip "$lib2"
+checkzip "$lib1"
+checkzip "$lib2"
 echo
 
 # kiểm tra phiên bản 
