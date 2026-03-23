@@ -1,4 +1,4 @@
-#!/bin/bash +x
+#!/bin/bash -x
 UA="Mozilla/5.0 (Linux; Android 14; Mobile)"
 Xem() { curl -sLNG -A "$UA" --connect-timeout 20 "$1"; }
 Taive() { curl -sLk -A "$UA" --connect-timeout 20 "$1" -o "$2"; }
@@ -120,9 +120,10 @@ echo "- Tải YouTube $VER apk, apks..."
 # Tải YouTube apk
 
 for v in -2 0 -4 -3; do 
- [ -f apk/YouTube.apkm -a -f apk/YouTube.apk ] && echo " Đã tải apk và apkm" && break
+ [ -f apk/YouTube.apkm -a -f apk/YouTube.apk ] && echo " - Đã tải apk và apkm" && break
  [ "$v" = "0" ] && v=${v//0/}
  yt="google-inc/youtube/youtube-${VER//./-}-release/youtube-${VER//./-}${v}-android-apk-download"
+ echo " - Đang tải YouTube$v"
  taiyt "YouTube$v" "$yt"
  if [ -n "$(hexdump -n 2 "apk/YouTube$v" | grep '4b50')" ]; then 
   [ -n "$(unzip -l apk/YouTube$v | grep 'base.apk')" ] &&  mv -f apk/YouTube$v apk/YouTube.apkm && echo "- Xong .apkm"
