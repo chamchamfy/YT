@@ -123,18 +123,12 @@ for v in -2 0 -4 -3; do
  yt="google-inc/youtube/youtube-${VER//./-}-release/youtube-${VER//./-}${v}-android-apk-download"
  taiyt "YouTube$v" "$yt"
  if [ -n "$(hexdump -n 2 "apk/YouTube$v" | grep '4b50')" ]; then 
-  if [ -n "$(unzip -l apk/YouTube$v | grep 'base.apk')" ]; then 
-   echo "- YouTube$v thành .apkm"
-   mv -f apk/YouTube$v apk/YouTube.apkm
-  fi
-  if [ -n "$(unzip -l apk/YouTube$v | grep 'resources.arsc')" ]; then 
-   echo "- YouTube$v thành .apk"
-   mv -f apk/YouTube$v apk/YouTube.apk
-  fi
+  [ -n "$(unzip -l apk/YouTube$v | grep 'base.apk')" ] &&  mv -f apk/YouTube$v apk/YouTube.apkm && echo "- Xong .apkm"
+  [ -n "$(unzip -l apk/YouTube$v | grep 'resources.arsc')" ] && mv -f apk/YouTube$v apk/YouTube.apk && echo "- Xong .apk"
  else 
   rm -f apk/YouTube$v
  fi 
- [ -f apk/YouTube.apkm -a -f apk/YouTube.apk ] && break
+ [ -f apk/YouTube.apkm -a -f apk/YouTube.apk ] && echo " Đã tải apk và apkm" && break
 done
 
 if [ "$TYPE" == 'true' ]; then
