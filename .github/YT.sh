@@ -119,6 +119,7 @@ echo "- Tải YouTube $VER apk, apks..."
 # Tải YouTube apk
 
 for v in -2 0 -4 -3; do 
+ [ -f apk/YouTube.apkm -a -f apk/YouTube.apk ] && echo " Đã tải apk và apkm" && break
  [ "$v" = "0" ] && v=${v//0/}
  yt="google-inc/youtube/youtube-${VER//./-}-release/youtube-${VER//./-}${v}-android-apk-download"
  taiyt "YouTube$v" "$yt"
@@ -128,7 +129,6 @@ for v in -2 0 -4 -3; do
  else 
   rm -f apk/YouTube$v
  fi 
- [ -f apk/YouTube.apkm -a -f apk/YouTube.apk ] && echo " Đã tải apk và apkm" && break
 done
 
 if [ "$TYPE" == 'true' ]; then
