@@ -124,11 +124,11 @@ for v in -2 0 -4 -3; do
  taiyt "YouTube$v" "$yt"
  if [ -n "$(hexdump -n 2 "apk/YouTube$v" | grep '4b50')" ]; then 
   if [ -n "$(unzip -l apk/YouTube$v | grep 'base.apk')" ]; then 
-   echo "- apk* thành .apkm"
+   echo "- YouTube$v thành .apkm"
    mv -f apk/YouTube$v apk/YouTube.apkm
   fi
   if [ -n "$(unzip -l apk/YouTube$v | grep 'resources.arsc')" ]; then 
-   echo "- apk* thành .apk"
+   echo "- YouTube$v thành .apk"
    mv -f apk/YouTube$v apk/YouTube.apk
   fi
  else 
