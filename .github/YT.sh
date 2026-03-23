@@ -1,3 +1,4 @@
+#!/bin/bash +x
 UA="Mozilla/5.0 (Linux; Android 14; Mobile)"
 Xem() { curl -sLNG -A "$UA" --connect-timeout 20 "$1"; }
 Taive() { curl -sLk -A "$UA" --connect-timeout 20 "$1" -o "$2"; }
