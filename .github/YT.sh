@@ -119,7 +119,7 @@ fi
 echo "- Tải YouTube $VER apk, apks..."
 # Tải YouTube apk
 
-for v in 0 -2 -4 -3; do 
+for v in 0 -2; do 
  [ -f apk/YouTube.apkm -a -f apk/YouTube.apk ] && echo " - Đã tải apk và apkm" && break
  [ "$v" = "0" ] && v=${v//0/}
  yt="google-inc/youtube/youtube-${VER//./-}-release/youtube-${VER//./-}${v}-android-apk-download"
@@ -133,6 +133,8 @@ for v in 0 -2 -4 -3; do
   rm -f apk/YouTube$v
  fi 
 done
+
+ls apk/*.*
 
 if [ "$TYPE" == 'true' ]; then
  if [ -f apk/YouTube.apk ]; then 
@@ -180,8 +182,7 @@ fi
 # MOD YouTube 
 echo "▼ Bắt đầu quá trình xây dựng..."
 echo
- tenapk=$(ls $PWD/apk/*.apk 2>/dev/null) && pb=$(aapt dump badging $tenapk | grep "versionName" | cut -d "'" -f 6)
- [ -z "$tenapk" ] && tenapk=$(ls $PWD/apk/*.apkm 2>/dev/null) && pb=$(unzip -p "$tenapk" info.json | grep 'release_version' | cut -d '"' -f 4)
+tenapk=$(ls $PWD/apk/*.apk 2>/dev/null) || tenapk=$(ls $PWD/apk/*.apkm 2>/dev/null)
 eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -b -p $lib2 $tenapk -o YT.apk "$Mro $theme $Tof $Ton $feature""
 echo '- Quá trình xây dựng apk xong.'
 echo
