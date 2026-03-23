@@ -126,9 +126,10 @@ for v in 0 -2; do
  echo " - Đang tải YouTube$v"
  find apk/ -type f -empty -delete
  taiyt "YouTube$v" "$yt"
- if [ -n "$(hexdump -n 2 "apk/YouTube$v" | grep '4b50')" ]; then 
-  [ -n "$(unzip -l apk/YouTube$v | grep 'base.apk')" ] &&  mv -f apk/YouTube$v apk/YouTube.apkm && echo " - Xong .apkm"
-  [ -n "$(unzip -l apk/YouTube$v | grep 'resources.arsc')" ] && mv -f apk/YouTube$v apk/YouTube.apk && echo " - Xong .apk"
+ if [ -n "$(hexdump -n 2 "apk/YouTube$v" | grep '4b50')" ]; then
+  if [ -n "$(unzip -l "apk/YouTube$v" | grep 'base.apk')" ]; then mv -f apk/YouTube$v apk/YouTube.apkm && echo " - Xong .apkm";
+  elif [ -n "$(unzip -l "apk/YouTube$v" | grep 'resources.arsc')" ]; then mv -f apk/YouTube$v apk/YouTube.apk && echo " - Xong .apk"; 
+  fi 
  else 
   rm -f apk/YouTube$v
  fi 
