@@ -119,15 +119,16 @@ fi
 echo "- Tải YouTube $VER apk, apks..."
 # Tải YouTube apk
 
-for v in -2 0 -4 -3; do 
+for v in 0 -2 -4 -3; do 
  [ -f apk/YouTube.apkm -a -f apk/YouTube.apk ] && echo " - Đã tải apk và apkm" && break
  [ "$v" = "0" ] && v=${v//0/}
  yt="google-inc/youtube/youtube-${VER//./-}-release/youtube-${VER//./-}${v}-android-apk-download"
  echo " - Đang tải YouTube$v"
+ find apk/ -type f -empty -delete
  taiyt "YouTube$v" "$yt"
  if [ -n "$(hexdump -n 2 "apk/YouTube$v" | grep '4b50')" ]; then 
-  [ -n "$(unzip -l apk/YouTube$v | grep 'base.apk')" ] &&  mv -f apk/YouTube$v apk/YouTube.apkm && echo "- Xong .apkm"
-  [ -n "$(unzip -l apk/YouTube$v | grep 'resources.arsc')" ] && mv -f apk/YouTube$v apk/YouTube.apk && echo "- Xong .apk"
+  [ -n "$(unzip -l apk/YouTube$v | grep 'base.apk')" ] &&  mv -f apk/YouTube$v apk/YouTube.apkm && echo " - Xong .apkm"
+  [ -n "$(unzip -l apk/YouTube$v | grep 'resources.arsc')" ] && mv -f apk/YouTube$v apk/YouTube.apk && echo " - Xong .apk"
  else 
   rm -f apk/YouTube$v
  fi 
@@ -154,7 +155,9 @@ echo "- Xoá lib thừa."
 tapk='apk/YouTube.apk'
 apkeditor d -t sig -i "$tapk" -sig "tmp/signatures_dir" &>/dev/null 
 zip -qr $tapk -d $lib
-else 
+fi
+if [ -f apk/YouTube.apkm ]; then
+echo "- Xoá lib thừa."
 tapk='apk/YouTube.apkm'
 apkeditor d -t sig -i "$tapk" -sig "tmp/signatures_dir" &>/dev/null
 zip -qr $tapk -d $libm
@@ -177,7 +180,9 @@ fi
 # MOD YouTube 
 echo "▼ Bắt đầu quá trình xây dựng..."
 echo
-eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -b -p $lib2 apk/YouTube.apk -o YT.apk "$Mro $theme $Tof $Ton $feature""
+ tenapk=$(ls $PWD/apk/*.apk 2>/dev/null) && pb=$(aapt dump badging $tenapk | grep "versionName" | cut -d "'" -f 6)
+ [ -z "$tenapk" ] && tenapk=$(ls $PWD/apk/*.apkm 2>/dev/null) && pb=$(unzip -p "$tenapk" info.json | grep 'release_version' | cut -d '"' -f 4)
+eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -b -p $lib2 $tenapk -o YT.apk "$Mro $theme $Tof $Ton $feature""
 echo '- Quá trình xây dựng apk xong.'
 echo
 
