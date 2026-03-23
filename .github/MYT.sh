@@ -114,7 +114,7 @@ fi
 echo "- Tải YouTube $VER apk, apks..."
 # Tải YouTube apk
 kkk1="google-inc/youtube/youtube-${VER//./-}-release/youtube-${VER//./-}-2-android-apk-download"
-kkk2="google-inc/youtube/youtube-${VER//./-}-release/youtube-${VER//./-}-android-apk-download"
+kkk2="google-inc/youtube/youtube-${VER//./-}-release/youtube-${VER//./-}-4-android-apk-download"
 
 # Tải
 TaiYT 'YouTube1' "$kkk1" & TaiYT 'YouTube2' "$kkk2"
