@@ -158,7 +158,7 @@ if [ "$TYPE" == 'true' ]; then
  fi
  if [ -f apk/YouTube.apkm ]; then 
  echo "- Giải nén base.apk" 
- unzip -qo apk/YouTube.apkm 'base.apk' "split_config.${DEVICE//-/_}.apk" split_config.xxhdpi.apk split_config.vi.apk -d Tav
+ unzip -qo apk/YouTube.apkm 'base.apk' "split_config.${DEVICE//-/_}.apk" split_config.xxhdpi.apk split_config.vi.apk -d Tav || echo " Lỗi giải nén"
  fi
 fi
 
