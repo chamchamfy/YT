@@ -8,7 +8,7 @@ lib1="lib/revanced-cli.jar"
 lib2="lib/revanced-patches.jar"
 # tải patch ổn định
 pbsta() {
-PV1="$(Xem https://github.com/ReVanced/$1 | grep -om1 "ReVanced/$1/releases/tag/.*\"" | sed -e 's|/v|/|g' -e 's|\"||g')"
+PV1="$(Xem https://github.com/ReVanced/$1/releases | grep "releases/tag/v" | grep -v "\-dev" | grep -oP 'v\K[0-9.]+' | head -n 1)"
 PV2="https://github.com/ReVanced/$1/releases/download/v${PV1##*/}/$2-${PV1##*/}$4.$3"
 echo "- Url: $PV2"
 Taive "$PV2" "lib/$1.jar"; 
