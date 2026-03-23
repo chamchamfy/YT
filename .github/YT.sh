@@ -27,7 +27,7 @@ Vop2=D
 fi
 
 # tải apk
-TaiYT() {
+taiyt() {
 LT="https://www.apkmirror.com"
 L1="$LT$(wget -q -U "$UA" "$LT/apk/$2" -O - | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
 L2="$LT$(wget -q -U "$UA" "$L1" -O - | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
@@ -117,46 +117,25 @@ fi
 
 echo "- Tải YouTube $VER apk, apks..."
 # Tải YouTube apk
-kkk1="google-inc/youtube/youtube-${VER//./-}-release/youtube-${VER//./-}-2-android-apk-download"
-kkk2="google-inc/youtube/youtube-${VER//./-}-release/youtube-${VER//./-}-android-apk-download"
 
-# Tải
-TaiYT 'YouTube1' "$kkk1" 
-sleep 1
-TaiYT 'YouTube2' "$kkk2"
-
-# Chờ tải xong
-Loading apk/YouTube1.txt apk/YouTube2.txt
-
-# Xem xét apk
-#[ "$(file apk/YouTube1 | grep -cm1 HTML)" == 1 ] && rm -fr apk/YouTube1
-#[ "$(file apk/YouTube2 | grep -cm1 HTML)" == 1 ] && rm -fr apk/YouTube2
-[ -z "$(hexdump -n 2 apk/YouTube1 | grep '4b50')" ] && rm -rf apk/YouTube1
-[ -z "$(hexdump -n 2 apk/YouTube2 | grep '4b50')" ] && rm -rf apk/YouTube2
-
-if [ -f apk/YouTube1 ]; then
- if [ "$(unzip -l apk/YouTube1 | grep -cm1 'base.apk')" == 1 ]; then
- echo "- apk1 thành apkm."
- mv apk/YouTube1 apk/YouTube.apkm
+for v in -2 0 -4 -3; do 
+ [ "$v" = "0" ] && v=${v//0/}
+ yt="google-inc/youtube/youtube-${VER//./-}-release/youtube-${VER//./-}${v}-android-apk-download"
+ taiyt "YouTube$v" "$yt"
+ if [ -n "$(hexdump -n 2 "apk/YouTube$v" | grep '4b50')" ]; then 
+  if [ -n "$(unzip -l apk/YouTube$v | grep 'base.apk')" ]; then 
+   echo "- apk* thành .apkm"
+   mv -f apk/YouTube$v apk/YouTube.apkm
+  fi
+  if [ -n "$(unzip -l apk/YouTube$v | grep 'resources.arsc')" ]; then 
+   echo "- apk* thành .apk"
+   mv -f apk/YouTube$v apk/YouTube.apk
+  fi
  else 
- echo "- apk1 thành apk."
- mv apk/YouTube1 apk/YouTube.apk
- fi
-else
-echo "- không có file apk1"
-fi
-
-if [ -f apk/YouTube2 ]; then
- if [ "$(unzip -l apk/YouTube2 | grep -cm1 'base.apk')" == 1 ]; then
- echo "- apk2 thành apkm."
- mv apk/YouTube2 apk/YouTube.apkm
- else
- echo "- apk2 thành apk."
- mv apk/YouTube2 apk/YouTube.apk
- fi
-else
-echo "- không có file apk2"
-fi
+  rm -f apk/YouTube$v
+ fi 
+ [ -f apk/YouTube.apkm -a -f apk/YouTube.apk ] && break
+done
 
 if [ "$TYPE" == 'true' ]; then
  if [ -f apk/YouTube.apk ]; then 
@@ -177,9 +156,11 @@ cp -rf $HOME/.github/Tools/sqlite3_$ach $HOME/.github/Modun/common/sqlite3
 if [ -f apk/YouTube.apk ]; then 
 echo "- Xoá lib thừa."
 tapk='apk/YouTube.apk'
+apkeditor d -t sig -i "$tapk" -sig "tmp/signatures_dir" &>/dev/null 
 zip -qr $tapk -d $lib
 else 
 tapk='apk/YouTube.apkm'
+apkeditor d -t sig -i "$tapk" -sig "tmp/signatures_dir" &>/dev/null
 zip -qr $tapk -d $libm
 fi
 
@@ -200,7 +181,7 @@ fi
 # MOD YouTube 
 echo "▼ Bắt đầu quá trình xây dựng..."
 echo
-eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 apk/YouTube.apk -o YT.apk "$Mro $theme $Tof $Ton $feature""
+eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -b -p $lib2 apk/YouTube.apk -o YT.apk "$Mro $theme $Tof $Ton $feature""
 echo '- Quá trình xây dựng apk xong.'
 echo
 
@@ -215,7 +196,8 @@ mv YT.apk $HOME/Tav/YouTube.apk
 cd $HOME
 [ -f Tav/base.apk ] && rsign Tav/base.apk YT2.apk $HOME/Up/YT-$VER-$ach${amoled2}-rsign.apk || apkeditor b -t sig -i YT2.apk -sig "tmp/signatures_dir" -o "$HOME/Up/YT-$VER-$ach${amoled2}-rsign.apk" &>/dev/null
 else
-apksign YT.apk $HOME/Up/YT-$VER-$ach${amoled2}.apk
+#apksign YT.apk $HOME/Up/YT-$VER-$ach${amoled2}.apk
+cp -rf YT.apk $HOME/Up/YT-$VER-$ach${amoled2}.apk
 ls Up
 exit 0
 fi
