@@ -12,6 +12,7 @@ permissions: write-all
 
 env:
   GH_TOKEN: ${{ github.token }}
+   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24
 
 jobs:
   build:
@@ -32,10 +33,10 @@ jobs:
             type: 'false'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'zulu'
@@ -53,7 +54,7 @@ jobs:
           . .github/MYT.sh
 
       - name: Upload File
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           name: YT-MORPHE ${{ env.VER }} ${{ env.Kad }}
           tag_name: M${{ env.V }}${{ env.VER }}
@@ -62,7 +63,7 @@ jobs:
 
       - name: Upload Json
         if: matrix.type == 'true'
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           name: Update
           tag_name: Up
