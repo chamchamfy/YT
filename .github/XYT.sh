@@ -9,7 +9,7 @@ R='inotia00'
 pbsta() {
 PV1=$(Xem "https://github.com/$R/$1/releases" | grep "$1/releases/tag/v" | grep -vm1 "\-dev" | awk -F'/v|"' '{print $7}')
 #PV1=$(Xem https://api.github.com/repos/$R/$1/releases/latest | grep '"tag_name":' | awk -F'"v|"' '{print $4}')
-PV2="https://github.com/$R/$1/releases/download/v${PV1##*/}/$2-${PV1##*/}$4.$3"
+PV2="https://github.com/$R/$1/releases/download/v${PV1}/$2-${PV1/}$4.$3"
 echo "- Url: $PV2"
 Taive "$PV2" "lib/$1.jar"; 
 }
@@ -17,7 +17,7 @@ Taive "$PV2" "lib/$1.jar";
 pbdev() {
 PV1=$(curl -sL https://github.com/$R/$1/releases | grep "$1/releases/tag/v" | grep -m1 "\-dev" | awk -F'/v|"' '{print $7}')
 #PV1=$(Xem https://api.github.com/repos/$R/$1/releases | grep '"tag_name":' | grep -m1 "\-dev" | awk -F'"v|"' '{print $4}')
-PV2="https://github.com/$R/$1/releases/download/v${PV1##*/}/$2-${PV1##*/}$4.$3"
+PV2="https://github.com/$R/$1/releases/download/v${PV1}/$2-${PV1}$4.$3"
 echo "- Url: $PV2"
 Taive "$PV2" "lib/$1.jar"; 
 }
