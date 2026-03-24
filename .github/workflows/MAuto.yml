@@ -54,7 +54,7 @@ jobs:
           . .github/MYT.sh
 
       - name: Upload File
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release@v2
         with:
           name: YT-MORPHE ${{ env.VER }} ${{ env.Kad }}
           tag_name: M${{ env.V }}${{ env.VER }}
@@ -63,7 +63,7 @@ jobs:
 
       - name: Upload Json
         if: matrix.type == 'true'
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release@v2
         with:
           name: Update
           tag_name: Up
