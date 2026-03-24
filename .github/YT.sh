@@ -64,7 +64,7 @@ elif [ "$DEVICE" == "x86_64" ]; then
 lib="lib/x86/* lib/arm64-v8a/* lib/armeabi-v7a/*"
 libm="*x86* *arm64-v8a* *armeabi-v7a*"
 ach="x64"
-elif [ "$DEVICE" == "armeabi_v7a" ]; then
+elif [ "$DEVICE" == "armeabi-v7a" ]; then
 lib="lib/arm64-v8a/* lib/x86/* lib/x86_64/*"
 libm="*arm64-v8a* *x86* *x86_64*"
 ach="arm"
