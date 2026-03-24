@@ -6,18 +6,19 @@ Taive() { curl -skL -A "$UA" --connect-timeout 20 "$1" -o "$2"; }
 lib1="lib/revanced-cli.jar"
 lib2="lib/revanced-patches.jar"
 # tải patch ổn định
+R='ReVanced'
 pbsta() {
-#PV1=$(Xem https://github.com/ReVanced/$1/releases | grep "releases/tag/v" | grep -v "\-dev" | grep -oP 'v\K[0-9.]+' | head -n 1)
-PV1=$(Xem https://api.github.com/repos/ReVanced/$1/releases/latest | grep -oP '"tag_name":\s*"v\K[0-9.]+')
-PV2="https://github.com/ReVanced/$1/releases/download/v$PV1/$2-$PV1$4.$3"
+#PV1=$(Xem "https://github.com/$R/$1/releases" | grep "$1/releases/tag/v" | grep -vm1 "\-dev" | awk -F'/v|"' '{print $7}')
+PV1=$(Xem https://api.github.com/repos/$R/$1/releases/latest | grep '"tag_name":' | awk -F'"v|"' '{print $4}')
+PV2="https://github.com/$R/$1/releases/download/v$PV1/$2-$PV$4.$3"
 echo "- Url: $PV2"
 Taive "$PV2" "lib/$1.jar"; 
 }
 # tải patch dev
 pbdev() {
-#PV1=$(Xem https://github.com/ReVanced/$1/releases | grep "releases/tag/v" | grep "\-dev" | grep -oP 'v\K[0-9.-]+dev[0-9.]*' | head -n 1)
-PV1=$(Xem https://api.github.com/repos/ReVanced/$1/releases | grep -m 1 '"tag_name":' | grep -oP '"tag_name":\s*"v\K[0-9.-]+dev[0-9.]*')
-PV2="https://github.com/ReVanced/$1/releases/download/v$PV1/$2-$PV1$4.$3"
+#PV1=$(curl -sL https://github.com/$R/$1/releases | grep "$1/releases/tag/v" | grep -m1 "\-dev" | awk -F'/v|"' '{print $7}')
+PV1=$(Xem https://api.github.com/repos/$R/$1/releases | grep '"tag_name":' | grep -m1 "\-dev" | awk -F'"v|"' '{print $4}')
+PV2="https://github.com/$R/$1/releases/download/v$PV1/$2-$PV1$4.$3"
 echo "- Url: $PV2"
 Taive "$PV2" "lib/$1.jar"; 
 }
