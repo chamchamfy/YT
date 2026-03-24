@@ -29,8 +29,7 @@ on:
         required: false
         default: ' -d "Hide captions button" -d "Hide autoplay button" -d "Playback speed"'
 permissions: write-all
-env:
- FORCE_JAVASCRIPT_ACTIONS_TO_NODE24
+env: FORCE_JAVASCRIPT_ACTIONS_TO_NODE24
 jobs:
   build1:
     name: 'Buid root'
