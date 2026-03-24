@@ -5,16 +5,19 @@ Taive() { curl -sL -A "$UA" --connect-timeout 20 "$1" -o "$2"; }
 lib1="lib/morphe-cli.jar"
 lib2="lib/morphe-patches.jar"
 # tải patch ổn định
+R='MorpheApp'
 pbsta() {
-PV1=$(Xem https://github.com/MorpheApp/$1 | grep -om1 "MorpheApp/$1/releases/tag/.*\"" | sed -e 's|/v|/|g' -e 's|\"||g')
-PV2="https://github.com/MorpheApp/$1/releases/download/v${PV1##*/}/$2-${PV1##*/}$4.$3"
+#PV1=$(Xem "https://github.com/$R/$1/releases" | grep "releases/tag/v" | grep -vm1 "\-dev" | awk -F'/v|"' '{print $7}')
+PV1=$(Xem https://api.github.com/repos/$R/$1/releases/latest | grep -oPm1 '"tag_name":\s*"v\K[^"]+')
+PV2="https://github.com/$R/$1/releases/download/v${PV1}/$2-${PV1}$4.$3"
 echo "-Url: $PV2"
 Taive "$PV2" "lib/$1.jar";
 }
 # tải patch dev
 pbdev() {
-PV1="$(Xem https://github.com/MorpheApp/$1/releases | grep -om1 "MorpheApp/$1/releases/tag/.*dev" | cut -d '"' -f1 | sed -e 's|/v|/|g' -e 's|\"||g')"
-PV2="https://github.com/MorpheApp/$1/releases/download/v${PV1##*/}/$2-${PV1##*/}$4.$3"
+#PV1=$(Xem https://github.com/$R/$1/releases | grep "releases/tag/v" | grep -m1 "\-dev" | awk -F'/v|"' '{print $7}')
+PV1=$(Xem https://api.github.com/repos/$R/$T1/releases | grep "\-dev" | grep -oPm1 '"tag_name":\s*"v\K[^"]+')
+PV2="https://github.com/$R/$1/releases/download/v${PV1}/$2-${PV1}$4.$3"
 echo "- Url: $PV2"
 Taive "$PV2" "lib/$1.jar"; 
 }
