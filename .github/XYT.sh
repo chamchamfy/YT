@@ -5,16 +5,19 @@ Taive() { curl -sLk -A "$UA" --connect-timeout 20 "$1" -o "$2"; }
 lib1="lib/revanced-cli.jar"
 lib2="lib/revanced-patches.jar"
 # tải patch ổn định
+R='inotia00'
 pbsta() {
-PV1="$(Xem https://github.com/inotia00/$1 | grep -om1 "inotia00/$1/releases/tag/.*\"" | sed -e 's|/v|/|g' -e 's|\"||g')"
-PV2="https://github.com/inotia00/$1/releases/download/v${PV1##*/}/$2-${PV1##*/}$4.$3"
+#PV1=$(Xem "https://github.com/$R/$1/releases" | grep "$1/releases/tag/v" | grep -vm1 "\-dev" | awk -F'/v|"' '{print $7}')
+PV1=$(Xem https://api.github.com/repos/$R/$1/releases/latest | grep '"tag_name":' | awk -F'"v|"' '{print $4}')
+PV2="https://github.com/$R/$1/releases/download/v$PV1/$2-$PV$4.$3"
 echo "- Url: $PV2"
 Taive "$PV2" "lib/$1.jar"; 
 }
 # tải patch dev
 pbdev() {
-PV1="$(Xem https://github.com/inotia00/$1/releases | grep -om1 "inotia00/$1/releases/tag/.*dev" | cut -d '"' -f1 | sed -e 's|/v|/|g' -e 's|\"||g')"
-PV2="https://github.com/inotia00/$1/releases/download/v${PV1##*/}/$2-${PV1##*/}$4.$3"
+#PV1=$(curl -sL https://github.com/$R/$1/releases | grep "$1/releases/tag/v" | grep -m1 "\-dev" | awk -F'/v|"' '{print $7}')
+PV1=$(Xem https://api.github.com/repos/$R/$1/releases | grep '"tag_name":' | grep -m1 "\-dev" | awk -F'"v|"' '{print $4}')
+PV2="https://github.com/$R/$1/releases/download/v$PV1/$2-$PV1$4.$3"
 echo "- Url: $PV2"
 Taive "$PV2" "lib/$1.jar"; 
 }
@@ -158,7 +161,7 @@ if [ "$TYPE" == 'true' ]; then
  fi
  if [ -f apk/YouTube.apkm ]; then 
  echo "- Giải nén base.apk" 
- unzip -qo apk/YouTube.apkm 'base.apk' "split_config.${DEVICE//-/_}.apk" split_config.xxhdpi.apk split_config.vi.apk -d Tav
+ unzip -qo apk/YouTube.apkm 'base.apk' "split_config.${DEVICE//-/_}.apk" split_config.xxhdpi.apk split_config.vi.apk -d Tav || echo " Giải nén lỗi"
  fi
 fi
 
