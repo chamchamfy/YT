@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       VERSION:
-        description: 'Example: 20.07.39'
+        description: 'Example: 20.40.45'
         required: false
         default: 'New'
       DEVICE:
@@ -27,11 +27,11 @@ on:
       FEATURE:
         description: 'Turn on/off feature on: [-e "feature"], off: [-d "feature"]'
         required: false
-        default: ' -d "Hide captions button" -d "Hide autoplay button" -d "Playback speed"'
+        default: ' '
 permissions: write-all
 jobs:
   build1:
-    name: 'Buid root'
+    name: "Buid ${{ inputs.DEVICE }} amoled root"
     if: github.repository == 'chamchamfy/YT' && github.ref == 'refs/heads/Vip'
     runs-on: ubuntu-latest
     steps:
@@ -47,9 +47,10 @@ jobs:
           DEVICE: ${{ inputs.DEVICE }}
           DEV: ${{ inputs.DEV }}
           TYPE: 'true'
+          AMOLED: 'true'
           FEATURE: ${{ inputs.FEATURE }}
         run: |
-          # kakathic
+          # chamchamfy
           . .github/install.sh
           . .github/YT.sh
       - name: Upload File
@@ -58,7 +59,7 @@ jobs:
           name: YT-RE ${{ env.VER }} ${{ env.Kad }}
           tag_name: K${{ env.V }}${{ env.VER }}
           files: Up/*
-          body: "${{ env.BODY }}"
+          body: ${{ env.BODY }}
       - name: Upload Json
         uses: softprops/action-gh-release@v2
         with:
@@ -67,73 +68,7 @@ jobs:
           files: Up*.json
           prerelease: true
   build2:
-    name: 'Buid no-root'
-    if: github.repository == 'chamchamfy/YT' && github.ref == 'refs/heads/Vip'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - name: Setup JDK
-        uses: actions/setup-java@v5
-        with:
-          java-version: '17'
-          distribution: 'zulu'
-      - name: See build
-        env:
-          VERSION: ${{ inputs.VERSION }}
-          DEVICE: ${{ inputs.DEVICE }}
-          DEV: ${{ inputs.DEV }}
-          TYPE: 'false'
-          FEATURE: ${{ inputs.FEATURE }}
-        run: |
-          # kakathic
-          . .github/install.sh
-          . .github/YT.sh
-      - name: Upload File
-        uses: softprops/action-gh-release@v2
-        with:
-          name: YT-RE ${{ env.VER }} ${{ env.Kad }}
-          tag_name: K${{ env.V }}${{ env.VER }}
-          files: Up/*
-          body: "${{ env.BODY }}"
-  build3:
-    name: 'Buid amoled root'
-    if: github.repository == 'chamchamfy/YT' && github.ref == 'refs/heads/Vip'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - name: Setup JDK
-        uses: actions/setup-java@v5
-        with:
-          java-version: '17'
-          distribution: 'zulu'
-      - name: See build
-        env:
-          VERSION: ${{ inputs.VERSION }}
-          DEVICE: ${{ inputs.DEVICE }}
-          DEV: ${{ inputs.DEV }}
-          TYPE: 'true'
-          AMOLED: 'true'
-          FEATURE: ${{ inputs.FEATURE }}
-        run: |
-          # kakathic
-          . .github/install.sh
-          . .github/YT.sh
-      - name: Upload File
-        uses: softprops/action-gh-release@v2
-        with:
-          name: YT-RE ${{ env.VER }} ${{ env.Kad }}
-          tag_name: K${{ env.V }}${{ env.VER }}
-          files: Up/*
-          body: "${{ env.BODY }}"
-      - name: Upload Json
-        uses: softprops/action-gh-release@v2
-        with:
-          name: Update
-          tag_name: Up
-          files: Up*.json
-          prerelease: true
-  build4:
-    name: 'Buid amoled no-root'
+    name: "Buid ${{ inputs.DEVICE }} amoled no-root"
     if: github.repository == 'chamchamfy/YT' && github.ref == 'refs/heads/Vip'
     runs-on: ubuntu-latest
     steps:
@@ -152,7 +87,7 @@ jobs:
           AMOLED: 'true'
           FEATURE: ${{ inputs.FEATURE }}
         run: |
-          # kakathic
+          # chamchamfy
           . .github/install.sh
           . .github/YT.sh
       - name: Upload File
@@ -161,5 +96,5 @@ jobs:
           name: YT-RE ${{ env.VER }} ${{ env.Kad }}
           tag_name: K${{ env.V }}${{ env.VER }}
           files: Up/*
-          body: "${{ env.BODY }}"
-          
+          body: ${{ env.BODY }}
+       
