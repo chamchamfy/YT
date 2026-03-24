@@ -1,4 +1,3 @@
-#!/bin/bash -x
 UA="Mozilla/5.0 (Linux; Android 14; Mobile)"
 Xem() { curl -sLNG -A "$UA" --connect-timeout 20 "$1"; }
 Taive() { curl -skL -A "$UA" --connect-timeout 20 "$1" -o "$2"; }
@@ -8,15 +7,17 @@ lib1="lib/revanced-cli.jar"
 lib2="lib/revanced-patches.jar"
 # tải patch ổn định
 pbsta() {
-PV1="$(Xem https://github.com/ReVanced/$1/releases | grep "releases/tag/v" | grep -v "\-dev" | grep -oP 'v\K[0-9.]+' | head -n 1)"
-PV2="https://github.com/ReVanced/$1/releases/download/v${PV1##*/}/$2-${PV1##*/}$4.$3"
+#PV1=$(Xem https://github.com/ReVanced/$1/releases | grep "releases/tag/v" | grep -v "\-dev" | grep -oP 'v\K[0-9.]+' | head -n 1)
+PV1=$(Xem https://api.github.com/repos/ReVanced/$1/releases/latest | grep -oP '"tag_name":\s*"v\K[0-9.]+')
+PV2="https://github.com/ReVanced/$1/releases/download/v$PV1/$2-$PV1$4.$3"
 echo "- Url: $PV2"
 Taive "$PV2" "lib/$1.jar"; 
 }
 # tải patch dev
 pbdev() {
-PV1="$(Xem https://github.com/ReVanced/$1/releases | grep -om1 "ReVanced/$1/releases/tag/.*dev" | cut -d '"' -f1 | sed -e 's|/v|/|g' -e 's|\"||g')"
-PV2="https://github.com/ReVanced/$1/releases/download/v${PV1##*/}/$2-${PV1##*/}$4.$3"
+#PV1=$(Xem https://github.com/ReVanced/$1/releases | grep "releases/tag/v" | grep "\-dev" | grep -oP 'v\K[0-9.-]+dev[0-9.]*' | head -n 1)
+PV1=$(Xem https://api.github.com/repos/ReVanced/$1/releases | grep -m 1 '"tag_name":' | grep -oP '"tag_name":\s*"v\K[0-9.-]+dev[0-9.]*')
+PV2="https://github.com/ReVanced/$1/releases/download/v$PV1/$2-$PV1$4.$3"
 echo "- Url: $PV2"
 Taive "$PV2" "lib/$1.jar"; 
 }
