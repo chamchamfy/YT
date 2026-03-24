@@ -29,16 +29,15 @@ on:
         required: false
         default: ' -d "Hide captions button" -d "Hide autoplay button" -d "Playback speed"'
 permissions: write-all
-env: FORCE_JAVASCRIPT_ACTIONS_TO_NODE24
 jobs:
   build1:
     name: 'Buid root'
     if: github.repository == 'chamchamfy/YT' && github.ref == 'refs/heads/Vip'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setup JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'zulu'
@@ -72,9 +71,9 @@ jobs:
     if: github.repository == 'chamchamfy/YT' && github.ref == 'refs/heads/Vip'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setup JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'zulu'
@@ -101,9 +100,9 @@ jobs:
     if: github.repository == 'chamchamfy/YT' && github.ref == 'refs/heads/Vip'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setup JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'zulu'
@@ -138,9 +137,9 @@ jobs:
     if: github.repository == 'chamchamfy/YT' && github.ref == 'refs/heads/Vip'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Setup JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'zulu'
