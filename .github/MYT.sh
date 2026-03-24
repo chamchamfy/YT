@@ -16,7 +16,7 @@ Taive "$PV2" "lib/$1.jar";
 # tải patch dev
 pbdev() {
 #PV1=$(Xem https://github.com/$R/$1/releases | grep "releases/tag/v" | grep -m1 "\-dev" | awk -F'/v|"' '{print $7}')
-PV1=$(Xem https://api.github.com/repos/$R/$T1/releases | grep "\-dev" | grep -oPm1 '"tag_name":\s*"v\K[^"]+')
+PV1=$(Xem https://api.github.com/repos/$R/$1/releases | grep "\-dev" | grep -oPm1 '"tag_name":\s*"v\K[^"]+')
 PV2="https://github.com/$R/$1/releases/download/v${PV1}/$2-${PV1}$4.$3"
 echo "- Url: $PV2"
 Taive "$PV2" "lib/$1.jar"; 
