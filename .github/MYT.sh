@@ -132,7 +132,7 @@ for v in 0 -2 -4 -3; do
  fi
 done
 
-ls apk/*.*
+ls apk/*.apk*
 
 if [ "$TYPE" == 'true' ]; then
  if [ -f apk/YouTube.apk ]; then 
