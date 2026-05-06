@@ -121,15 +121,15 @@ for v in 0 -2 -4 -3; do
  echo " - Đang tải YouTube$v"
  find apk/ -type f -empty -delete
  taiyt "YouTube$v" "$yt"
- if [ -n "$(hexdump -n 2 "apk/YouTube$v" | grep '4b50')" ]; then
-  if [ -n "$(unzip -l "apk/YouTube$v" | grep 'base.apk')" ]; then 
-  mv -f apk/YouTube$v apk/YouTube.apkm && echo " - Xong .apkm";
-  elif [ -n "$(unzip -l "apk/YouTube$v" | grep 'resources.arsc')" ]; then 
-  mv -f apk/YouTube$v apk/YouTube.apk && echo " - Xong .apk"; 
+ if [ -n "$(hexdump -n 2 "apk/YouTube$v" 2>/dev/null | grep '4b50')" ]; then
+  if [ -n "$(unzip -l "apk/YouTube$v" 2>/dev/null | grep 'base.apk')" ]; then 
+    mv -f "apk/YouTube$v" apk/YouTube.apkm && echo " - Xong .apkm"
+  elif [ -n "$(unzip -l "apk/YouTube$v" 2>/dev/null | grep 'resources.arsc')" ]; then 
+    mv -f "apk/YouTube$v" apk/YouTube.apk && echo " - Xong .apk"
   fi 
  else 
-  rm -f apk/YouTube$v
- fi 
+  rm -f "apk/YouTube$v" 2>/dev/null
+ fi
 done
 
 ls apk/*.*
@@ -181,7 +181,7 @@ fi
 echo "▼ Bắt đầu quá trình xây dựng..."
 echo
 tenapk=$(ls $PWD/apk/*.apk 2>/dev/null) || tenapk=$(ls $PWD/apk/*.apkm 2>/dev/null)
-eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -b -p $lib2 $tenapk -o YT.apk "$Mro $theme $Tof $Ton $feature""
+eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 $tapk -o YT.apk "$Tof $Ton $Mro $theme $feature""
 echo '- Quá trình xây dựng apk xong.'
 echo
 
