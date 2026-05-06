@@ -150,6 +150,7 @@ fi
 echo > $HOME/.github/Modun/common/$ach
 cp -rf $HOME/.github/Tools/sqlite3_$ach $HOME/.github/Modun/common/sqlite3
 
+mkdir -p tmp
 if [ -f apk/YouTube.apk ]; then 
 echo "- Xoá lib thừa."
 tapk='apk/YouTube.apk'
@@ -185,8 +186,8 @@ eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 $tapk -o YT.apk "$To
 echo '- Quá trình xây dựng apk xong.'
 echo
 
-ls YT-temporary-files/*.apk
-cp -rf YT-temporary-files/*.apk YT2.apk
+ls *-temporary-files/*.apk
+cp -rf *-temporary-files/*.apk YT2.apk
 
 # Chờ xây dựng xong
 if [ "$TYPE" == 'true' ]; then
