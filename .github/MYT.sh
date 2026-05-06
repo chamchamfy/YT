@@ -23,7 +23,7 @@ Taive "$PV2" "lib/$1.jar";
 }
 
 # tải apk
-TaiYT() {
+taiyt() {
 LT="https://www.apkmirror.com"
 L1="$LT$(wget -q -U "$UA" "$LT/apk/$2" -O - | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
 L2="$LT$(wget -q -U "$UA" "$L1" -O - | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
