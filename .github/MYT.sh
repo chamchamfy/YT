@@ -70,19 +70,19 @@ if [ "$DEV" == "Develop" ]; then
 echo "  Dùng Dev"
 pbdev morphe-cli morphe-cli jar -all
 pbdev morphe-patches patches mpp
+Vidon=$(Xem https://raw.githubusercontent.com/MorpheApp/morphe-patches/main/patches-list.json | jq -r '.patches[0].compatiblePackages[] | select(.packageName == "com.google.android.youtube") | .targets[] | select(.isExperimental == true) | .version' | head -n 1)
 
 else
-echo "  Dùng Sta"
+echo "  Dùng Stable"
 pbsta morphe-cli morphe-cli jar -all
 pbsta morphe-patches patches mpp
+Vidon=$(Xem https://raw.githubusercontent.com/MorpheApp/morphe-patches/main/patches-list.json | jq -r '.patches[0].compatiblePackages[] | select(.packageName == "com.google.android.youtube") | .targets[] | select(.isExperimental == false) | .version' | head -n 1)
 fi
 
 echo
-# lấy dữ liệu phiên bản mặc định
-#[0] = lấy số đầu, [-1] = lấy số cuối
-Vidon=$(Xem https://raw.githubusercontent.com/MorpheApp/morphe-patches/main/patches-list.json | jq -r '.patches[0].compatiblePackages."com.google.android.youtube"[0]')
-
-echo "     $Vidon"
+# Lấy phiên bản
+#Vidon=$(Xem https://raw.githubusercontent.com/MorpheApp/morphe-patches/main/patches-list.json | jq -r '.patches[0].compatiblePackages[] | select(.packageName == "com.google.android.youtube") | .targets[0].version')
+echo " Phiên bản: $Vidon"
 if [ "$VERSION" == 'New' ]; then
 VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube/feed/" | grep -m1 -oP '(?<=YouTube )[\d.]+')
 [ -z "$VER" ] && VER=$Vidon
