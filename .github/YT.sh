@@ -69,6 +69,7 @@ lib="lib/arm64-v8a/* lib/x86/* lib/x86_64/*"
 libm="*arm64-v8a* *x86* *x86_64*"
 ach="arm"
 fi
+
 echo
 # Tải tool cli
 echo "- Tải tool cli, patches, integrations..."
@@ -91,13 +92,13 @@ echo
 Vidon=$(Xem https://raw.githubusercontent.com/ReVanced/revanced-patches/main/patches/src/main/kotlin/app/revanced/patches/youtube/ad/general/HideAdsPatch.kt | awk -F'"' '/com.google.android.youtube/,/\)/ { print $2 }' | grep -E '^[0-9.]+$' | tail -n1)
 echo "  $Vidon"
 if [ "$VERSION" == 'New' ]; then
-VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube/feed/" | grep -m 1 -oP '(?<=YouTube )[\d.]+')
+VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube/feed/" | grep -m1 -oP '(?<=YouTube )[\d.]+')
 [ -z "$VER" ] && VER=$Vidon
 Kad=Build$Vop
 V=V$Vop2
 elif [ "$VERSION" == 'Auto' ]; then
 VER=$Vidon
-[ -z "$Vidon" ] && VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube/feed/" | grep -m 1 -oP '(?<=YouTube )[\d.]+')
+[ -z "$Vidon" ] && VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube/feed/" | grep -m1 -oP '(?<=YouTube )[\d.]+')
 Kad=Auto$Vop
 V=U$Vop2
 else
@@ -209,8 +210,7 @@ ls Up
 exit 0
 fi
 
-cd Tav
-tar -cf - * | xz -9kz > $HOME/.github/Modun/common/lib.tar.xz
+cd Tav && tar -cf - * | xz -9kz > $HOME/.github/Modun/common/lib.tar.xz
 cd $HOME
 
 # Tạo module.prop
