@@ -83,11 +83,7 @@ pbsta revanced-cli revanced-cli jar -all
 pbsta revanced-patches patches rvp
 fi
 
-# kiểm tra tải tool
-#checkzip "$lib1"
-#checkzip "$lib2"
 echo
-
 # kiểm tra phiên bản 
 Vidon=$(Xem https://raw.githubusercontent.com/ReVanced/revanced-patches/main/patches/src/main/kotlin/app/revanced/patches/youtube/ad/general/HideAdsPatch.kt | awk -F'"' '/com.google.android.youtube/,/\)/ { print $2 }' | grep -E '^[0-9.]+$' | tail -n1)
 echo "  $Vidon"

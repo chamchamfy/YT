@@ -77,11 +77,7 @@ pbsta morphe-cli morphe-cli jar -all
 pbsta morphe-patches patches mpp
 fi
 
-# kiểm tra tải tool
-#checkzip "$lib1"
-#checkzip "$lib2"
 echo
-
 # lấy dữ liệu phiên bản mặc định
 #[0] = lấy số đầu, [-1] = lấy số cuối
 Vidon=$(Xem https://raw.githubusercontent.com/MorpheApp/morphe-patches/main/patches-list.json | jq -r '.patches[0].compatiblePackages."com.google.android.youtube"[0]')
