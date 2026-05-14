@@ -10,15 +10,15 @@ on:
 
 permissions: write-all
 
-env:
-  GH_TOKEN: ${{ github.token }}
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   build:
     name: Build ${{ matrix.device }} ${{ matrix.type == 'true' && 'root' || 'no-root' }}
     if: github.repository == 'chamchamfy/YT' && github.ref == 'refs/heads/Vip'
     runs-on: ubuntu-latest
+    
+    env:
+      GH_TOKEN: ${{ github.token }}
+    
     strategy:
       fail-fast: false
       matrix:
@@ -33,7 +33,8 @@ jobs:
             type: 'false'
     
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout
+        uses: actions/checkout@v5
       
       - name: Setup JDK
         uses: actions/setup-java@v5
@@ -41,8 +42,9 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
 
-      - name: See build
+      - name: Build Process
         run: |
+          # chamchamfy
           if [ -z "$VERSION" ]; then
             DEVICE='${{ matrix.device }}'
             DEV='Stable'
@@ -53,19 +55,14 @@ jobs:
           . .github/install.sh
           . .github/YT.sh
 
-      - name: Upload File
-        uses: softprops/action-gh-release@v2
-        with:
-          name: YT-RE ${{ env.VER }} ${{ env.Kad }}
-          tag_name: K${{ env.V }}${{ env.VER }}
-          files: Up/*
-          body: "${{ env.BODY }}"
+      - name: Release APKs
+        run: |
+          TAG="K${{ env.V }}${{ env.VER }}"
+          gh release create "$TAG" --title "YT-RE ${{ env.VER }} ${{ env.Kad }}" --notes "${{ env.BODY }}" || true
+          gh release upload "$TAG" Up/* --clobber
 
-      - name: Upload Json
+      - name: Update Json
         if: matrix.type == 'true'
-        uses: softprops/action-gh-release@v2
-        with:
-          name: Update
-          tag_name: Up
-          files: Up*.json
-          prerelease: true
+        run: |
+          gh release create "Up" --title "Update" --notes "" --prerelease || true
+          gh release upload "Up" Up*.json --clobber

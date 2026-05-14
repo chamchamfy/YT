@@ -28,14 +28,16 @@ on:
         description: 'Turn on/off feature on: [-e "feature"], off: [-d "feature"]'
         required: false
         default: ' '
+
 permissions: write-all
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build1:
     name: "Buid ${{ inputs.DEVICE }} amoled root"
     if: github.repository == 'chamchamfy/YT' && github.ref == 'refs/heads/Vip'
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v5
       - name: Setup JDK
@@ -52,26 +54,25 @@ jobs:
           AMOLED: 'true'
           FEATURE: ${{ inputs.FEATURE }}
         run: |
+          # chamchamfy
           . .github/install.sh
           . .github/MYT.sh
       - name: Upload File
-        uses: softprops/action-gh-release@v2
-        with:
-          name: YT-MORPHE ${{ env.VER }} ${{ env.Kad }}
-          tag_name: M${{ env.V }}${{ env.VER }}
-          files: Up/*
-          body: "${{ env.BODY }}"
+        run: |
+          TAG="M${{ env.V }}${{ env.VER }}"
+          gh release create "$TAG" --title "YT-MORPHE ${{ env.VER }} ${{ env.Kad }}" --notes "${{ env.BODY }}" || true
+          gh release upload "$TAG" Up/* --clobber
       - name: Upload Json
-        uses: softprops/action-gh-release@v2
-        with:
-          name: Update
-          tag_name: Up
-          files: Up*.json
-          prerelease: true
+        run: |
+          gh release create "Up" --title "Update" --notes "" --prerelease || true
+          gh release upload "Up" Up*.json --clobber
+
   build2:
     name: "Buid ${{ inputs.DEVICE }} amoled no-root"
     if: github.repository == 'chamchamfy/YT' && github.ref == 'refs/heads/Vip'
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v5
       - name: Setup JDK
@@ -88,12 +89,11 @@ jobs:
           AMOLED: 'true'
           FEATURE: ${{ inputs.FEATURE }}
         run: |
+          # chamchamfy
           . .github/install.sh
           . .github/MYT.sh
       - name: Upload File
-        uses: softprops/action-gh-release@v2
-        with:
-          name: YT-MORPHE ${{ env.VER }} ${{ env.Kad }}
-          tag_name: M${{ env.V }}${{ env.VER }}
-          files: Up/*
-          body: "${{ env.BODY }}"
+        run: |
+          TAG="M${{ env.V }}${{ env.VER }}"
+          gh release create "$TAG" --title "YT-MORPHE ${{ env.VER }} ${{ env.Kad }}" --notes "${{ env.BODY }}" || true
+          gh release upload "$TAG" Up/* --clobber
