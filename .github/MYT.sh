@@ -187,7 +187,8 @@ echo '- Quá trình xây dựng apk xong.'
 echo
 
 ls $PWD/*
-find $HOME/ -type d -name "*temporary*"
+find $HOME/ -type f -name "*.apk"
+ls $PWD/lib/morphe-data/*/*
 ls $PWD/*-temporary-files/*.apk
 cp -rf $PWD/*-temporary-files/*.apk YT2.apk
 
