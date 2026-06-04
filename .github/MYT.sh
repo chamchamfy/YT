@@ -1,4 +1,5 @@
-UA="Mozilla/5.0 (Linux; Android 14; Mobile)"
+User="User-Agent: Mozilla/5.0 (Linux; Android 14; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36"
+UA="Mozilla/5.0 (Linux; Android 14; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36"
 Xem() { curl -sLNG -A "$UA" --connect-timeout 20 "$1"; }
 Taive() { curl -sL -A "$UA" --connect-timeout 20 "$1" -o "$2"; }
 # load dữ liệu 
@@ -32,6 +33,22 @@ wget -q -U "$UA" "$L2" -O "apk/$1"
 #L2="$LT$(Xem "$L1" | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
 #Taive "$L2" "apk/$1"
 echo "Link: $L2"
+file "apk/$1" | tee "apk/$1.txt";
+}
+
+taiyt2() {
+ LT="https://www.apkmirror.com"
+ CK="apk/apk_cookie.txt"
+ OUT="apk/$1"
+ L1_DATA=$(wget -qO- --save-cookies="$CK" --keep-session-cookies -U "$UA" "$LT/apk/$2")
+ L1_PATH=$(echo "$L1_DATA" | grep -o 'href="/apk/[^"]*download/[^"]*"' | head -n1 | cut -d'"' -f2)
+ [ -z "$L1_PATH" ] && L1_PATH=$(echo "$L1_DATA" | grep -o 'href="/wp-content/themes/APKMirror/download.php?id=[0-9]*' | head -n1 | cut -d'"' -f2)
+ if [ -n "$L1_PATH" ]; then
+  if [[ "$L1_PATH" == *"/download/"* ]]; then L2_DATA=$(wget -qO- --load-cookies="$CK" --save-cookies="$CK" --keep-session-cookies -U "$UA" --header="Referer: $LT/apk/$2" "$LT$L1_PATH"); L2_PATH=$(echo "$L2_DATA" | grep -o 'href="/wp-content/themes/APKMirror/download.php?id=[0-9]*' | head -n1 | cut -d'"' -f2); else L2_PATH="$L1_PATH"; fi
+  if [ -n "$L2_PATH" ]; then wget -q --load-cookies="$CK" -U "$UA" --header="Referer: $LT$L1_PATH" "$LT$L2_PATH" -O "$OUT"; fi
+ fi
+ rm -f "$CK"
+ echo "Link: $L2"
 file "apk/$1" | tee "apk/$1.txt";
 }
 
@@ -120,7 +137,7 @@ for v in 0 -2 -4 -3; do
  yt="google-inc/youtube/youtube-${VER//./-}-release/youtube-${VER//./-}${v}-android-apk-download"
  echo " - Đang tải YouTube$v"
  find apk/ -type f -empty -delete
- taiyt "YouTube$v" "$yt"
+ taiyt2 "YouTube$v" "$yt"
  if [ -n "$(hexdump -n 2 "apk/YouTube$v" 2>/dev/null | grep '4b50')" ]; then
   if [ -n "$(unzip -l "apk/YouTube$v" 2>/dev/null | grep 'base.apk')" ]; then 
     mv -f "apk/YouTube$v" apk/YouTube.apkm && echo " - Xong .apkm"
