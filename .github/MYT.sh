@@ -139,7 +139,7 @@ ls apk/*.apk*
 if [ "$TYPE" == 'true' ]; then
  if [ -f apk/YouTube.apk ]; then 
  echo "- Giải nén Lib" 
- cp apk/YouTube.apk Tav/base.apk 
+ #cp apk/YouTube.apk Tav/base.apk 
  unzip -qo apk/YouTube.apk lib/$DEVICE/* -d tmp
  fi
  if [ -f apk/YouTube.apkm ]; then 
