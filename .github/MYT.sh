@@ -156,13 +156,13 @@ tam="$PWD/tmp"
 if [ -f apk/YouTube.apk ]; then 
 echo "- Xoá lib thừa."
 tapk='apk/YouTube.apk'
-apkeditor d -t sig -i "$tapk" -sig "$tam/signatures_dir" &>/dev/null 
+apkeditor d -t sig -i "$tapk" -sig "tmp/signatures_dir" &>/dev/null 
 zip -qr $tapk -d $lib
 fi
 if [ -f apk/YouTube.apkm ]; then
 echo "- Xoá lib thừa."
 tapk='apk/YouTube.apkm'
-apkeditor d -t sig -i "$tapk" -sig "$tam/signatures_dir" &>/dev/null
+apkeditor d -t sig -i "$tapk" -sig "tmp/signatures_dir" &>/dev/null
 zip -qr $tapk -d $libm
 fi
 
@@ -188,8 +188,9 @@ eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 $tapk -o YT.apk "$To
 echo '- Quá trình xây dựng apk xong.'
 echo
 
-ls $tam/*-temporary-files/*.apk
-cp -rf $tam/*-temporary-files/*.apk YT2.apk
+ls $PWD/*
+ls $PWD/*-temporary-files/*.apk
+cp -rf $PWD/*-temporary-files/*.apk YT2.apk
 
 # Chờ xây dựng xong
 if [ "$TYPE" == 'true' ]; then
