@@ -154,6 +154,7 @@ cp -rf $HOME/.github/Tools/sqlite3_$ach $HOME/.github/Modun/common/sqlite3
 
 if [ -f apk/YouTube.apk ]; then 
 echo "- Xoá lib thừa apk"
+rm -f apk/YouTube.apkm 2>/dev/null
 tapk='apk/YouTube.apk'
 apkeditor d -t sig -i "$tapk" -sig "signatures_dir" &>/dev/null 
 zip -qr $tapk -d $lib || echo " •Không có lib cần xoá!"
