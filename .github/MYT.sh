@@ -116,7 +116,7 @@ fi
 echo "- Tải YouTube $VER apk, apks..."
 # Tải YouTube apk
 
-for v in 0 -2 -4 -3; do 
+for v in 0 -4 -2 -3; do 
  [ -f apk/YouTube.apkm -a -f apk/YouTube.apk ] && echo " - Đã tải apk và apkm" && break
  [ "$v" = "0" ] && v=${v//0/}
  yt="google-inc/youtube/youtube-${VER//./-}-release/youtube-${VER//./-}${v}-android-apk-download"
@@ -153,15 +153,15 @@ echo > $HOME/.github/Modun/common/$ach
 cp -rf $HOME/.github/Tools/sqlite3_$ach $HOME/.github/Modun/common/sqlite3
 
 if [ -f apk/YouTube.apk ]; then 
-echo "- Xoá lib thừa."
+echo "- Xoá lib thừa apk"
 tapk='apk/YouTube.apk'
 apkeditor d -t sig -i "$tapk" -sig "signatures_dir" &>/dev/null 
-zip -qr $tapk -d $lib
+zip -qr $tapk -d $lib || echo " •Không có lib cần xoá!"
 fi
 if [ -f apk/YouTube.apkm ]; then
-echo "- Xoá lib thừa."
+echo "- Xoá lib thừa apkm"
 tapk='apk/YouTube.apkm'
-zip -qr $tapk -d $libm
+zip -qr $tapk -d $libm || echo " •Không có lib cần xoá!"
 fi
 
 # Xử lý morphe patches
