@@ -26,12 +26,12 @@ Taive "$PV2" "lib/$1.jar";
 # tải apk
 taiyt() {
 LT="https://www.apkmirror.com"
-L1="$LT$(wget -q -U "$UA" "$LT/apk/$2" -O - | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
+( L1="$LT$(wget -q -U "$UA" "$LT/apk/$2" -O - | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
 L2="$LT$(wget -q -U "$UA" "$L1" -O - | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
-wget -q -U "$UA" "$L2" -O "apk/$1"
-#L1="$LT$(Xem "$LT/apk/$2" | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
-#L2="$LT$(Xem "$L1" | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
-#Taive "$L2" "apk/$1"
+wget -q -U "$UA" "$L2" -O "apk/$1"; ) || (
+L1="$LT$(Xem "$LT/apk/$2" | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
+L2="$LT$(Xem "$L1" | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
+Taive "$L2" "apk/$1"; )
 echo "Link: $L2"
 file "apk/$1" | tee "apk/$1.txt";
 }
@@ -137,7 +137,7 @@ for v in 0 -2 -4 -3; do
  yt="google-inc/youtube/youtube-${VER//./-}-release/youtube-${VER//./-}${v}-android-apk-download"
  echo " - Đang tải YouTube$v"
  find apk/ -type f -empty -delete
- taiyt2 "YouTube$v" "$yt"
+ taiyt "YouTube$v" "$yt"
  if [ -n "$(hexdump -n 2 "apk/YouTube$v" 2>/dev/null | grep '4b50')" ]; then
   if [ -n "$(unzip -l "apk/YouTube$v" 2>/dev/null | grep 'base.apk')" ]; then 
     mv -f "apk/YouTube$v" apk/YouTube.apkm && echo " - Xong .apkm"
