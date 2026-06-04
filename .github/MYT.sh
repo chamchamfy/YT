@@ -181,7 +181,9 @@ fi
 # MOD YouTube 
 echo "▼ Bắt đầu quá trình xây dựng..."
 echo
-tenapk=$(ls $PWD/apk/*.apk 2>/dev/null) || tenapk=$(ls $PWD/apk/*.apkm 2>/dev/null)
+tenapk=$(find "$PWD/apk" -maxdepth 1 -name "*.apk" | head -n 1)
+[ -z "$tenapk" ] && tenapk=$(find "$PWD/apk" -maxdepth 1 -name "*.apkm" | head -n 1)
+#tenapk=$(ls $PWD/apk/*.apk 2>/dev/null) || tenapk=$(ls $PWD/apk/*.apkm 2>/dev/null)
 eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 $tapk -o YT.apk "$Tof $Ton $Mro $theme $feature""
 echo '- Quá trình xây dựng apk xong.'
 echo
