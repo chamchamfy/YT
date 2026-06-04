@@ -186,11 +186,7 @@ eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 $tapk -o YT.apk "$To
 echo '- Quá trình xây dựng apk xong.'
 echo
 
-ls $PWD/*
-find $HOME/ -type f -name "*.apk"
-ls $PWD/lib/morphe-data/*/*
-ls $PWD/*-temporary-files/*.apk
-cp -rf $PWD/*-temporary-files/*.apk YT2.apk
+cp -rf *-temporary-files/*.apk YT2.apk 2>/dev/null || cp -rf lib/*/tmp/*.apk YT2.apk 2>/dev/null
 
 # Chờ xây dựng xong
 if [ "$TYPE" == 'true' ]; then
