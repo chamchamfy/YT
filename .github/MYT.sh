@@ -151,18 +151,15 @@ fi
 echo > $HOME/.github/Modun/common/$ach
 cp -rf $HOME/.github/Tools/sqlite3_$ach $HOME/.github/Modun/common/sqlite3
 
-mkdir -p tmp
-tam="$PWD/tmp"
 if [ -f apk/YouTube.apk ]; then 
 echo "- Xoá lib thừa."
 tapk='apk/YouTube.apk'
-apkeditor d -t sig -i "$tapk" -sig "tmp/signatures_dir" &>/dev/null 
+apkeditor d -t sig -i "$tapk" -sig "signatures_dir" &>/dev/null 
 zip -qr $tapk -d $lib
 fi
 if [ -f apk/YouTube.apkm ]; then
 echo "- Xoá lib thừa."
 tapk='apk/YouTube.apkm'
-apkeditor d -t sig -i "$tapk" -sig "tmp/signatures_dir" &>/dev/null
 zip -qr $tapk -d $libm
 fi
 
@@ -189,6 +186,7 @@ echo '- Quá trình xây dựng apk xong.'
 echo
 
 ls $PWD/*
+ls $PWD/*/*
 ls $PWD/*-temporary-files/*.apk
 cp -rf $PWD/*-temporary-files/*.apk YT2.apk
 
@@ -198,7 +196,7 @@ echo "Tạo rsign..."
 mv YT.apk $HOME/Tav/YouTube.apk
 [ "$(ls -A tmp 2>/dev/null)" ] && cd tmp && zip -qr $HOME/YT2.apk *
 cd $HOME
-[ -f Tav/base.apk ] && rsign Tav/base.apk YT2.apk $HOME/Up/MYT-$VER-$ach${amoled2}-rsign.apk || apkeditor b -t sig -i YT2.apk -sig "tmp/signatures_dir" -o "$HOME/Up/MYT-$VER-$ach${amoled2}-rsign.apk" &>/dev/null
+[ -f Tav/base.apk ] && apkeditor d -t sig -i "Tav/base.apk" -sig "signatures_dir" &>/dev/null && apkeditor b -t sig -i YT2.apk -sig "$PWD/signatures_dir" -o "$HOME/Up/MYT-$VER-$ach${amoled2}-rsign.apk" &>/dev/null
 else
 #apksign YT.apk $HOME/Up/MYT-$VER-$ach${amoled2}.apk
 cp -rf YT.apk $HOME/Up/MYT-$VER-$ach${amoled2}.apk
