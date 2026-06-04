@@ -194,7 +194,8 @@ echo "Tạo rsign..."
 mv YT.apk $HOME/Tav/YouTube.apk
 [ "$(ls -A tmp 2>/dev/null)" ] && cd tmp && zip -qr $HOME/YT2.apk *
 cd $HOME
-[ -f Tav/base.apk ] && apkeditor d -t sig -i "Tav/base.apk" -sig "signatures_dir" &>/dev/null && apkeditor b -t sig -i YT2.apk -sig "$PWD/signatures_dir" -o "$HOME/Up/MYT-$VER-$ach${amoled2}-rsign.apk" &>/dev/null
+[ -f Tav/base.apk ] && apkeditor d -t sig -i "Tav/base.apk" -sig "signatures_dir" &>/dev/null
+apkeditor b -t sig -i YT2.apk -sig "$PWD/signatures_dir" -o "$HOME/Up/MYT-$VER-$ach${amoled2}-rsign.apk" &>/dev/null
 else
 #apksign YT.apk $HOME/Up/MYT-$VER-$ach${amoled2}.apk
 cp -rf YT.apk $HOME/Up/MYT-$VER-$ach${amoled2}.apk
