@@ -28,11 +28,12 @@ taiyt() {
 LT="https://www.apkmirror.com"
 ( L1="$LT$(wget -q -U "$UA" "$LT/apk/$2" -O - | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
 [ -n "$L1" ] && L2="$LT$(wget -q -U "$UA" "$L1" -O - | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
+echo "Link: $L2"
 wget -q -U "$UA" "$L2" -O "apk/$1"; ) || (
 L1="$LT$(Xem "$LT/apk/$2" | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
 [ -n "$L1" ] && L2="$LT$(Xem "$L1" | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
-Taive "$L2" "apk/$1"; )
 echo "Link: $L2"
+Taive "$L2" "apk/$1"; )
 file "apk/$1" | tee "apk/$1.txt";
 }
 
@@ -186,7 +187,7 @@ echo '- Quá trình xây dựng apk xong.'
 echo
 
 ls $PWD/*
-ls $PWD/*/*
+find $HOME/ -type d -name "*temporary*"
 ls $PWD/*-temporary-files/*.apk
 cp -rf $PWD/*-temporary-files/*.apk YT2.apk
 
