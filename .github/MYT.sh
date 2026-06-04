@@ -27,28 +27,12 @@ Taive "$PV2" "lib/$1.jar";
 taiyt() {
 LT="https://www.apkmirror.com"
 ( L1="$LT$(wget -q -U "$UA" "$LT/apk/$2" -O - | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
-L2="$LT$(wget -q -U "$UA" "$L1" -O - | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
+[ -n "$L1" ] && L2="$LT$(wget -q -U "$UA" "$L1" -O - | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
 wget -q -U "$UA" "$L2" -O "apk/$1"; ) || (
 L1="$LT$(Xem "$LT/apk/$2" | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
-L2="$LT$(Xem "$L1" | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
+[ -n "$L1" ] && L2="$LT$(Xem "$L1" | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
 Taive "$L2" "apk/$1"; )
 echo "Link: $L2"
-file "apk/$1" | tee "apk/$1.txt";
-}
-
-taiyt2() {
- LT="https://www.apkmirror.com"
- CK="apk/apk_cookie.txt"
- OUT="apk/$1"
- L1_DATA=$(wget -qO- --save-cookies="$CK" --keep-session-cookies -U "$UA" "$LT/apk/$2")
- L1_PATH=$(echo "$L1_DATA" | grep -o 'href="/apk/[^"]*download/[^"]*"' | head -n1 | cut -d'"' -f2)
- [ -z "$L1_PATH" ] && L1_PATH=$(echo "$L1_DATA" | grep -o 'href="/wp-content/themes/APKMirror/download.php?id=[0-9]*' | head -n1 | cut -d'"' -f2)
- if [ -n "$L1_PATH" ]; then
-  if [[ "$L1_PATH" == *"/download/"* ]]; then L2_DATA=$(wget -qO- --load-cookies="$CK" --save-cookies="$CK" --keep-session-cookies -U "$UA" --header="Referer: $LT/apk/$2" "$LT$L1_PATH"); L2_PATH=$(echo "$L2_DATA" | grep -o 'href="/wp-content/themes/APKMirror/download.php?id=[0-9]*' | head -n1 | cut -d'"' -f2); else L2_PATH="$L1_PATH"; fi
-  if [ -n "$L2_PATH" ]; then wget -q --load-cookies="$CK" -U "$UA" --header="Referer: $LT$L1_PATH" "$LT$L2_PATH" -O "$OUT"; fi
- fi
- rm -f "$CK"
- echo "Link: $L2"
 file "apk/$1" | tee "apk/$1.txt";
 }
 
@@ -168,16 +152,17 @@ echo > $HOME/.github/Modun/common/$ach
 cp -rf $HOME/.github/Tools/sqlite3_$ach $HOME/.github/Modun/common/sqlite3
 
 mkdir -p tmp
+tam="$PWD/tmp"
 if [ -f apk/YouTube.apk ]; then 
 echo "- Xoá lib thừa."
 tapk='apk/YouTube.apk'
-apkeditor d -t sig -i "$tapk" -sig "tmp/signatures_dir" &>/dev/null 
+apkeditor d -t sig -i "$tapk" -sig "$tam/signatures_dir" &>/dev/null 
 zip -qr $tapk -d $lib
 fi
 if [ -f apk/YouTube.apkm ]; then
 echo "- Xoá lib thừa."
 tapk='apk/YouTube.apkm'
-apkeditor d -t sig -i "$tapk" -sig "tmp/signatures_dir" &>/dev/null
+apkeditor d -t sig -i "$tapk" -sig "$tam/signatures_dir" &>/dev/null
 zip -qr $tapk -d $libm
 fi
 
@@ -203,8 +188,8 @@ eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 $tapk -o YT.apk "$To
 echo '- Quá trình xây dựng apk xong.'
 echo
 
-ls *-temporary-files/*.apk
-cp -rf *-temporary-files/*.apk YT2.apk
+ls $tam/*-temporary-files/*.apk
+cp -rf $tam/*-temporary-files/*.apk YT2.apk
 
 # Chờ xây dựng xong
 if [ "$TYPE" == 'true' ]; then
