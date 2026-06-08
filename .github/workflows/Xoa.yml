@@ -6,7 +6,7 @@ on:
       days:
         description: "Số ngày giữ lại (ví dụ 30)"
         required: true
-        default: "14"
+        default: "30"
       include_incomplete:
         description: "Xóa cả runs chưa completed (queued/in_progress)? (true/false)"
         required: true
