@@ -64,26 +64,24 @@ fi
 echo
 # Tải tool cli
 echo "- Tải tool cli, patches..."
-if [ "$DEV" == "Develop" ]; then
-echo "  Dùng Dev"
+if [ "$DEV" == "Develop" ]; then echo "  Dùng Dev"
 pbdev morphe-cli morphe-cli jar -all
 pbdev morphe-patches patches mpp
 Ves1=$(Xem https://raw.githubusercontent.com/MorpheApp/morphe-patches/main/patches-list.json | jq -r '.patches[0].compatiblePackages[] | select(.packageName == "com.google.android.youtube") | .targets[] | select(.isExperimental == true) | .version' | head -n 1)
 Ves2=$(java -jar $lib1 list-versions --patches $lib2 --prerelease | sed -n '/com.google.android.youtube/,$p' | grep -oEm1 '[0-9]+\.[0-9]+\.[0-9]+')
-sort -V -C <<< "$Ves1"$'\n'"$Ves2" && Ves=Ves2 || Ves=Ves1
-else
-echo "  Dùng Stable"
+#sort -V -C <<< "$Ves1"$'\n'"$Ves2" && Ves=$Ves2 || Ves=$Ves1
+else echo "  Dùng Stable"
 pbsta morphe-cli morphe-cli jar -all
 pbsta morphe-patches patches mpp
 Ves1=$(Xem https://raw.githubusercontent.com/MorpheApp/morphe-patches/main/patches-list.json | jq -r '.patches[0].compatiblePackages[] | select(.packageName == "com.google.android.youtube") | .targets[] | select(.isExperimental == false) | .version' | head -n 1)
 Ves2=$(java -jar $lib1 list-versions --patches $lib2 | sed -n '/com.google.android.youtube/,$p' | grep -oEm1 '[0-9]+\.[0-9]+\.[0-9]+')
-sort -V -C <<< "$Ves1"$'\n'"$Ves2" && Ves=Ves2 || Ves=Ves1
+#sort -V -C <<< "$Ves1"$'\n'"$Ves2" && Ves=$Ves2 || Ves=$Ves1
 fi
 
-echo
-# Lấy phiên bản
 #Ves=$(Xem https://raw.githubusercontent.com/MorpheApp/morphe-patches/main/patches-list.json | jq -r '.patches[0].compatiblePackages[] | select(.packageName == "com.google.android.youtube") | .targets[0].version')
+Ves=$Ves2
 echo " Phiên bản: $Ves"
+
 if [ "$VERSION" == 'New' ]; then
 VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube/feed/" | grep -m1 -oP '(?<=YouTube )[\d.]+')
 [ -z "$VER" ] && VER=$Ves
