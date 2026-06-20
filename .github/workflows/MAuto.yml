@@ -50,7 +50,6 @@ jobs:
             DEV='Stable'
             VERSION='Auto'
             TYPE='${{ matrix.type }}'
-            AMOLED='true'
           fi
           . .github/install.sh
           . .github/MYT.sh

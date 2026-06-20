@@ -33,7 +33,7 @@ permissions: write-all
 
 jobs:
   build1:
-    name: "Buid ${{ inputs.DEVICE }} amoled root"
+    name: "Buid ${{ inputs.DEVICE }} root"
     if: github.repository == 'chamchamfy/YT' && github.ref == 'refs/heads/Vip'
     runs-on: ubuntu-latest
     env:
@@ -51,7 +51,6 @@ jobs:
           DEVICE: ${{ inputs.DEVICE }}
           DEV: ${{ inputs.DEV }}
           TYPE: 'true'
-          AMOLED: 'true'
           FEATURE: ${{ inputs.FEATURE }}
         run: |
           # chamchamfy
@@ -68,7 +67,7 @@ jobs:
           gh release upload "Up" Up*.json --clobber
 
   build2:
-    name: "Buid ${{ inputs.DEVICE }} amoled no-root"
+    name: "Buid ${{ inputs.DEVICE }} no-root"
     if: github.repository == 'chamchamfy/YT' && github.ref == 'refs/heads/Vip'
     runs-on: ubuntu-latest
     env:
@@ -86,7 +85,6 @@ jobs:
           DEVICE: ${{ inputs.DEVICE }}
           DEV: ${{ inputs.DEV }}
           TYPE: 'false'
-          AMOLED: 'true'
           FEATURE: ${{ inputs.FEATURE }}
         run: |
           # chamchamfy

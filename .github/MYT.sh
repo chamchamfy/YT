@@ -39,12 +39,8 @@ file "apk/$1" | tee "apk/$1.txt";
 
 # Load dữ liệu cài đặt: . $HOME/.github/
 #Ton=' -e "feature"'
-Tof=' -e "Disable Play Store updates" -e "Hide ads" -e "Copy video URL" -e "Double tap to seek" -e "Downloads" -e "Loop video" -e "Reload video" -e "Seekbar" -e "Swipe controls" -e "Change header" -e "Navigation bar" -e "Captions" -e "Ambient mode" -e "Miniplayer" -e "Exit fullscreen mode" -e "Open videos fullscreen" -e "Custom player overlay opacity" -e "Return YouTube Dislike" -e "Open Shorts in regular player" -e "SponsorBlock" -e "Spoof app version" -e "Alternative thumbnails" -e "Bypass image region restrictions" -e "Spoof device dimensions" -e "Bypass URL redirects" -e "Open links externally" -e "Sanitize sharing links" -e "Open system share sheet" -e "Video quality" -e "Playback speed" -e "Change start page" -d "Custom branding" -e "Video ads" -d "Override YouTube Music actions" -d "Shorts autoplay" -d "Disable layout updates" -d "Change form factor" '
-
-# là amoled
-[ "$AMOLED" == 'true' ] && amoled2='-Amoled'
-[ "$AMOLED" == 'true' ] && theme='-e "Theme"' || theme='-d "Theme"'
-[ "$TYPE" == 'true' ] && Mro='-d "GmsCore support" -d "Change package name"' || Mro='-e "GmsCore support" -e "Change package name"'
+Tof=' -e "Disable Play Store updates" -e "Hide ads" -e "Video ads" -e "SponsorBlock" -e "Copy video URL" -e "Double tap to seek" -e "Downloads" -e "Loop video" -e "Reload video" -e "Seekbar" -e "Swipe controls" -e "Change header" -e "Navigation bar" -e "Captions" -e "Ambient mode" -e "Miniplayer" -e "Exit fullscreen mode" -e "Open videos fullscreen" -e "Custom player overlay opacity" -e "Return YouTube Dislike" -e "Open Shorts in regular player" -e "Spoof app version" -e "Alternative thumbnails" -e "Bypass image region restrictions" -e "Spoof device dimensions" -e "Bypass URL redirects" -e "Open links externally" -e "Sanitize sharing links" -e "Open system share sheet" -e "Video quality" -e "Playback speed" -e "Change start page" -d "Override YouTube Music actions" -d "Shorts autoplay" -d "Disable layout updates" -d "Change form factor" '
+[ "$TYPE" == 'true' ] && Mro='-d "GmsCore support" -d "Change package name" -d "Custom branding"' || Mro='-e "GmsCore support" -e "Change package name" -e "Custom branding"'
 
 # Xoá lib dựa vào abi
 if [ "$DEVICE" == "arm64-v8a" ]; then
@@ -67,36 +63,39 @@ fi
 
 echo
 # Tải tool cli
-echo "- Tải tool cli, patches, integrations..."
+echo "- Tải tool cli, patches..."
 if [ "$DEV" == "Develop" ]; then
 echo "  Dùng Dev"
 pbdev morphe-cli morphe-cli jar -all
 pbdev morphe-patches patches mpp
-Vidon=$(Xem https://raw.githubusercontent.com/MorpheApp/morphe-patches/main/patches-list.json | jq -r '.patches[0].compatiblePackages[] | select(.packageName == "com.google.android.youtube") | .targets[] | select(.isExperimental == true) | .version' | head -n 1)
-
+Ves1=$(Xem https://raw.githubusercontent.com/MorpheApp/morphe-patches/main/patches-list.json | jq -r '.patches[0].compatiblePackages[] | select(.packageName == "com.google.android.youtube") | .targets[] | select(.isExperimental == true) | .version' | head -n 1)
+Ves2=$(java -jar $lib1 list-versions --patches $lib2 --prerelease | sed -n '/com.google.android.youtube/,$p' | grep -oEm1 '[0-9]+\.[0-9]+\.[0-9]+')
+sort -V -C <<< "$Ves1"$'\n'"$Ves2" && Ves=Ves2 || Ves=Ves1
 else
 echo "  Dùng Stable"
 pbsta morphe-cli morphe-cli jar -all
 pbsta morphe-patches patches mpp
-Vidon=$(Xem https://raw.githubusercontent.com/MorpheApp/morphe-patches/main/patches-list.json | jq -r '.patches[0].compatiblePackages[] | select(.packageName == "com.google.android.youtube") | .targets[] | select(.isExperimental == false) | .version' | head -n 1)
+Ves1=$(Xem https://raw.githubusercontent.com/MorpheApp/morphe-patches/main/patches-list.json | jq -r '.patches[0].compatiblePackages[] | select(.packageName == "com.google.android.youtube") | .targets[] | select(.isExperimental == false) | .version' | head -n 1)
+Ves2=$(java -jar $lib1 list-versions --patches $lib2 | sed -n '/com.google.android.youtube/,$p' | grep -oEm1 '[0-9]+\.[0-9]+\.[0-9]+')
+sort -V -C <<< "$Ves1"$'\n'"$Ves2" && Ves=Ves2 || Ves=Ves1
 fi
 
 echo
 # Lấy phiên bản
-#Vidon=$(Xem https://raw.githubusercontent.com/MorpheApp/morphe-patches/main/patches-list.json | jq -r '.patches[0].compatiblePackages[] | select(.packageName == "com.google.android.youtube") | .targets[0].version')
-echo " Phiên bản: $Vidon"
+#Ves=$(Xem https://raw.githubusercontent.com/MorpheApp/morphe-patches/main/patches-list.json | jq -r '.patches[0].compatiblePackages[] | select(.packageName == "com.google.android.youtube") | .targets[0].version')
+echo " Phiên bản: $Ves"
 if [ "$VERSION" == 'New' ]; then
 VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube/feed/" | grep -m1 -oP '(?<=YouTube )[\d.]+')
-[ -z "$VER" ] && VER=$Vidon
+[ -z "$VER" ] && VER=$Ves
 Kad=Build
 V=V
 elif [ "$VERSION" == 'Auto' ]; then
-VER=$Vidon
-[ -z "$Vidon" ] && VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube/feed/" | grep -m1 -oP '(?<=YouTube )[\d.]+')
+VER=$Ves
+[ -z "$Ves" ] && VER=$(Xem "https://www.apkmirror.com/apk/google-inc/youtube/feed/" | grep -m1 -oP '(?<=YouTube )[\d.]+')
 Kad=Auto
 V=U
 else
-Vidon="$VERSION"
+Ves="$VERSION"
 VER="$VERSION"
 Kad=Edit
 V=N
@@ -112,6 +111,8 @@ echo "! Là phiên bản mới nhất."
 #sleep 10
 #exit 0
 fi
+
+if [ "$Ves" != "$VER" ]; then echo "- Không hỗ trợ phiên bản $VER" && exit 0; fi
 
 echo "- Tải YouTube $VER apk, apks..."
 # Tải YouTube apk
@@ -165,27 +166,13 @@ tapk='apk/YouTube.apkm'
 zip -qr $tapk -d $libm || echo " •Không có lib cần xoá!"
 fi
 
-# Xử lý morphe patches
-if [ "$Vidon" != "$VER" ]; then
-echo "- Chuyển đổi phiên bản $VER"
-unzip -qo "$lib2" -d $HOME/jar
-for vak in $(grep -Rl "$Vidon" $HOME/jar); do
-cp -rf $vak test
-XHex test | sed -e "s/$(echo -n "$Vidon" | XHex)/$(echo -n "$VER" | XHex)/" | ZHex > $vak
-done
-cd $HOME/jar
-rm -fr $lib2
-zip -qr "$HOME/$lib2" *
-cd $HOME
-fi
-
 # MOD YouTube 
 echo "▼ Bắt đầu quá trình xây dựng..."
 echo
 tenapk=$(find "$PWD/apk" -maxdepth 1 -name "*.apk" | head -n 1)
 [ -z "$tenapk" ] && tenapk=$(find "$PWD/apk" -maxdepth 1 -name "*.apkm" | head -n 1)
 #tenapk=$(ls $PWD/apk/*.apk 2>/dev/null) || tenapk=$(ls $PWD/apk/*.apkm 2>/dev/null)
-eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 $tapk -o YT.apk "$Tof $Ton $Mro $theme $feature""
+eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 $tapk -o YT.apk "$Tof $Ton $Mro $feature""
 echo '- Quá trình xây dựng apk xong.'
 echo
 
@@ -198,10 +185,10 @@ mv YT.apk $HOME/Tav/YouTube.apk
 [ "$(ls -A tmp 2>/dev/null)" ] && cd tmp && zip -qr $HOME/YT2.apk *
 cd $HOME
 [ -f Tav/base.apk ] && apkeditor d -t sig -i "Tav/base.apk" -sig "signatures_dir" &>/dev/null
-apkeditor b -t sig -i YT2.apk -sig "$PWD/signatures_dir" -o "$HOME/Up/MYT-$VER-$ach${amoled2}-rsign.apk" &>/dev/null
+apkeditor b -t sig -i YT2.apk -sig "$PWD/signatures_dir" -o "$HOME/Up/MYT-$VER-$ach-rsign.apk" &>/dev/null
 else
-#apksign YT.apk $HOME/Up/MYT-$VER-$ach${amoled2}.apk
-cp -rf YT.apk $HOME/Up/MYT-$VER-$ach${amoled2}.apk
+#apksign YT.apk $HOME/Up/MYT-$VER-$ach.apk
+cp -rf YT.apk $HOME/Up/MYT-$VER-$ach.apk
 ls Up
 exit 0
 fi
@@ -216,21 +203,21 @@ author=chamchamfy
 description=Build '$date', YouTube edited tool by Morphe mod added disable play store updates.
 version='$VER'
 versionCode='${VER//./}'
-updateJson=https://github.com/'$GITHUB_REPOSITORY'/releases/download/Up/Up-M'$V$ach$amoled2'.json
+updateJson=https://github.com/'$GITHUB_REPOSITORY'/releases/download/Up/Up-M'$V$ach'.json
 ' > $HOME/.github/Modun/module.prop
 
 # Tạo json
 echo '{
 "version": "'$VER'",
 "versionCode": "'${VER//./}'",
-"zipUrl": "https://github.com/'$GITHUB_REPOSITORY'/releases/download/M'$V$VER'/MYT-Hybrid-'$VER'-'$ach$amoled2'.Zip",
+"zipUrl": "https://github.com/'$GITHUB_REPOSITORY'/releases/download/M'$V$VER'/MYT-Hybrid-'$VER'-'$ach'.Zip",
 "changelog": "https://github.com/'$GITHUB_REPOSITORY'/releases/download/Up/Up-M'$V'notes.json"
-}' > "Up-M$V$ach$amoled2.json"
+}' > "Up-M$V$ach.json"
 
 echo -e 'Update '$date' \nYouTube: '$VER' \nVersion: '${VER//./}'\nAuto by chamchamfy' > Up-M${V}notes.json
 
 # Tạo module magisk
 cd $HOME/.github/Modun
-zip -qr $HOME/Up/MYT-Hybrid-$VER-$ach$amoled2.zip *
+zip -qr $HOME/Up/MYT-Hybrid-$VER-$ach.zip *
 cd $HOME
 ls Up
