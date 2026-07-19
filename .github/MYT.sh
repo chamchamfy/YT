@@ -167,14 +167,15 @@ fi
 # MOD YouTube 
 echo "▼ Bắt đầu quá trình xây dựng..."
 echo
+tam=$PWD/lib/tam && mkdir -p $tam
 tenapk=$(find "$PWD/apk" -maxdepth 1 -name "*.apk" | head -n 1)
 [ -z "$tenapk" ] && tenapk=$(find "$PWD/apk" -maxdepth 1 -name "*.apkm" | head -n 1)
 #tenapk=$(ls $PWD/apk/*.apk 2>/dev/null) || tenapk=$(ls $PWD/apk/*.apkm 2>/dev/null)
-eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 $tapk -o YT.apk "$Tof $Ton $Mro $feature""
+eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 -t $tam --disable-purge -o YT.apk $tapk "$Tof $Ton $Mro $feature""
 echo '- Quá trình xây dựng apk xong.'
 echo
 
-cp -rf *-temporary-files/*.apk YT2.apk 2>/dev/null || cp -rf lib/*/tmp/*.apk YT2.apk 2>/dev/null
+cp -rf $tam/*/*.apk YT2.apk 2>/dev/null
 
 # Chờ xây dựng xong
 if [ "$TYPE" == 'true' ]; then
