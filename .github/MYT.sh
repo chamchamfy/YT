@@ -115,7 +115,7 @@ if [ "$Ves" != "$VER" ]; then echo "- Không hỗ trợ phiên bản $VER" && ex
 echo "- Tải YouTube $VER apk, apks..."
 # Tải YouTube apk
 
-for v in 0 -4 -2 -3; do 
+for v in 0 -3 -2 -4; do 
  [ -f apk/YouTube.apkm -a -f apk/YouTube.apk ] && echo " - Đã tải apk và apkm" && break
  [ "$v" = "0" ] && v=${v//0/}
  yt="google-inc/youtube/youtube-${VER//./-}-release/youtube-${VER//./-}${v}-android-apk-download"
