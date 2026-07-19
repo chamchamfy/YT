@@ -3,7 +3,7 @@ UA="Mozilla/5.0 (Linux; Android 14; Mobile) AppleWebKit/537.36 (KHTML, like Geck
 Xem() { curl -sLNG -A "$UA" --connect-timeout 20 "$1"; }
 Taive() { curl -sL -A "$UA" --connect-timeout 20 "$1" -o "$2"; }
 # load dữ liệu 
-lib1="lib/morphe-cli.jar"
+lib1="lib/morphe-desktop.jar"
 lib2="lib/morphe-patches.jar"
 # tải patch ổn định
 R='MorpheApp'
@@ -65,13 +65,13 @@ echo
 # Tải tool cli
 echo "- Tải tool cli, patches..."
 if [ "$DEV" == "Develop" ]; then echo "  Dùng Dev"
-pbdev morphe-cli morphe-cli jar -all
+pbdev morphe-desktop morphe-desktop jar -all
 pbdev morphe-patches patches mpp
 Ves1=$(Xem https://raw.githubusercontent.com/MorpheApp/morphe-patches/main/patches-list.json | jq -r '.patches[0].compatiblePackages[] | select(.packageName == "com.google.android.youtube") | .targets[] | select(.isExperimental == true) | .version' | head -n 1)
 Ves2=$(java -jar $lib1 list-versions --patches $lib2 --prerelease | sed -n '/com.google.android.youtube/,$p' | grep -oEm1 '[0-9]+\.[0-9]+\.[0-9]+')
 #sort -V -C <<< "$Ves1"$'\n'"$Ves2" && Ves=$Ves2 || Ves=$Ves1
 else echo "  Dùng Stable"
-pbsta morphe-cli morphe-cli jar -all
+pbsta morphe-desktop morphe-desktop jar -all
 pbsta morphe-patches patches mpp
 Ves1=$(Xem https://raw.githubusercontent.com/MorpheApp/morphe-patches/main/patches-list.json | jq -r '.patches[0].compatiblePackages[] | select(.packageName == "com.google.android.youtube") | .targets[] | select(.isExperimental == false) | .version' | head -n 1)
 Ves2=$(java -jar $lib1 list-versions --patches $lib2 | sed -n '/com.google.android.youtube/,$p' | grep -oEm1 '[0-9]+\.[0-9]+\.[0-9]+')
