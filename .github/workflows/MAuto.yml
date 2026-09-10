@@ -6,7 +6,7 @@ on:
       - '.github/workflows/MAuto.yml'
       - '.github/MYT.sh'
   schedule:
-    - cron: '0 0 * * 6'
+    - cron: '0 0 * * 4'
 
 permissions: write-all
 
