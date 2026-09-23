@@ -139,11 +139,11 @@ if [ "$TYPE" == 'true' ]; then
  if [ -f apk/YouTube.apk ]; then 
  echo "- Giải nén Lib" 
  #cp apk/YouTube.apk Tav/base.apk 
- unzip -qo apk/YouTube.apk lib/$DEVICE/* -d tmp
+ unzip -qo apk/YouTube.apk lib/$DEVICE/* -d tmp || echo " •Không có lib!"
  fi
  if [ -f apk/YouTube.apkm ]; then 
  echo "- Giải nén base.apk" 
- unzip -qo apk/YouTube.apkm 'base.apk' "split_config.${DEVICE//-/_}.apk" split_config.xxhdpi.apk split_config.vi.apk -d Tav
+ for f in 'base.apk' "split_config.${DEVICE//-/_}.apk" 'split_config.xxhdpi.apk' 'split_config.vi.apk'; do unzip -qo apk/YouTube.apkm "$f" -d Tav || echo " •Không có tập tin $f"; done
  fi
 fi
 
