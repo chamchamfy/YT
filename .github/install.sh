@@ -22,7 +22,7 @@ Xem() { curl -s -L -G -N -H "$User" --connect-timeout 20 "$1"; }
 Taive() { curl -s -L -k -H "$User" --connect-timeout 20 "$1" -o "$2"; }
 XHex() { xxd -p "$@" | tr -d "\n" | tr -d ' '; }
 ZHex() { xxd -r -p "$@"; }
-apksign() { java -jar $HOME/.github/Tools/apksigner.jar sign --cert "$HOME/.github/Tools/testkey.x509.pem" --key "$HOME/.github/Tools/testkey.pk8" --out "$2" "$1"; }
+apksign() { java -jar $HOME/.github/Tools/apksigner.jar sign --cert "$HOME/.github/Tools/cert.x509" --key "$HOME/.github/Tools/cert.pk8" --out "$2" "$1"; }
 Upenv() { echo "$1=$2" >> $GITHUB_ENV; }
 checkfile() { [ -e "$1" ] && echo "FILE:  OK ${1##*/}" || ( echo "- Lỗi không không thấy file ${1##*/}"; exit 1; ); }
 checkzip() { [ "$(file $1 | grep -cm1 'Zip')" == 1 ] && echo "FILE:  OK ${1##*/}" || ( echo "- Lỗi file ${1##*/}"; exit 1; ); }
