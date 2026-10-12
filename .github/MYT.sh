@@ -5,6 +5,9 @@ Taive() { curl -sL -A "$UA" --connect-timeout 20 "$1" -o "$2"; }
 # load dữ liệu 
 lib1="lib/morphe-desktop.jar"
 lib2="lib/morphe-patches.jar"
+KN="$HOME/.github/Tools/cc.keystore"
+KA="cc_alias"
+KP="chamchamfy"
 # tải patch ổn định
 R='MorpheApp'
 pbsta() {
@@ -171,7 +174,7 @@ tam=$PWD/lib/tam && mkdir -p $tam
 tenapk=$(find "$PWD/apk" -maxdepth 1 -name "*.apk" | head -n 1)
 [ -z "$tenapk" ] && tenapk=$(find "$PWD/apk" -maxdepth 1 -name "*.apkm" | head -n 1)
 #tenapk=$(ls $PWD/apk/*.apk 2>/dev/null) || tenapk=$(ls $PWD/apk/*.apkm 2>/dev/null)
-eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 -t $tam --disable-purge -o YT.apk $tapk "$Tof $Ton $Mro $feature""
+eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 -t $tam --disable-purge --keystore "$KN" --keystore-password "$KP" --keystore-entry-alias "$KA" --keystore-entry-password "$KP" -o YT.apk $tapk "$Tof $Ton $Mro $feature""
 echo '- Quá trình xây dựng apk xong.'
 echo
 
