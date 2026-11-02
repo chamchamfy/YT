@@ -178,11 +178,10 @@ eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 -t $tam --disable-pu
 echo '- Quá trình xây dựng apk xong.'
 echo
 
-cp -rf $tam/*/*.apk YT2.apk 2>/dev/null
-
 # Chờ xây dựng xong
 if [ "$TYPE" == 'true' ]; then
 echo "Tạo rsign..."
+mv -f $tam/*/*.apk YT2.apk 2>/dev/null || mv -f $tam/*/rebuilt.apk YT2.apk 2>/dev/null
 mv YT.apk $HOME/Tav/YouTube.apk
 [ "$(ls -A tmp 2>/dev/null)" ] && cd tmp && zip -qr $HOME/YT2.apk *
 cd $HOME
