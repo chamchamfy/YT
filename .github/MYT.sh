@@ -16,7 +16,6 @@ PV1=$(Xem https://api.github.com/repos/$R/$1/releases/latest | grep -oPm1 '"tag_
 PV2="https://github.com/$R/$1/releases/download/v${PV1}/$2-${PV1}$4.$3"
 echo "-Url: $PV2"
 wget -q -U "$UA" "$PV2" -O "lib/$1.jar" || Taive "$PV2" "lib/$1.jar"
-unzip -t "$PWD/morphe-desktop.jar" | grep 'No errors'
 czip "lib/$1.jar";
 }
 # tải patch dev
