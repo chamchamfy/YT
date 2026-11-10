@@ -1,7 +1,8 @@
 User="User-Agent: Mozilla/5.0 (Linux; Android 14; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36"
-UA="Mozilla/5.0 (Linux; Android 14; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36"
+UA="Mozilla/5.0 (Linux; Android 14; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.6998.39 Mobile Safari/537.36"
 Xem() { curl -sLNG -A "$UA" --connect-timeout 20 "$1"; }
 Taive() { curl -sL -A "$UA" --connect-timeout 20 "$1" -o "$2"; }
+czip() { [ -n "$(unzip -t $1 | grep 'No errors')" ] && echo "FILE: ${1##*/} OK" || echo "- Lỗi file ${1##*/}"; }
 # load dữ liệu 
 lib1="lib/morphe-desktop.jar"
 lib2="lib/morphe-patches.jar"
@@ -11,33 +12,29 @@ KP="chamchamfy"
 # tải patch ổn định
 R='MorpheApp'
 pbsta() {
-#PV1=$(Xem "https://github.com/$R/$1/releases" | grep "releases/tag/v" | grep -vm1 "\-dev" | awk -F'/v|"' '{print $7}')
 PV1=$(Xem https://api.github.com/repos/$R/$1/releases/latest | grep -oPm1 '"tag_name":\s*"v\K[^"]+')
 PV2="https://github.com/$R/$1/releases/download/v${PV1}/$2-${PV1}$4.$3"
 echo "-Url: $PV2"
-Taive "$PV2" "lib/$1.jar";
+wget -q -U "$UA" "$PV2" -O "lib/$1.jar" || Taive "$PV2" "lib/$1.jar"
+unzip -t "$PWD/morphe-desktop.jar" | grep 'No errors'
+czip "lib/$1.jar";
 }
 # tải patch dev
 pbdev() {
-#PV1=$(Xem https://github.com/$R/$1/releases | grep "releases/tag/v" | grep -m1 "\-dev" | awk -F'/v|"' '{print $7}')
 PV1=$(Xem https://api.github.com/repos/$R/$1/releases | grep -oPm1 '"tag_name":\s*"v\K[^"]+' | grep -m1 "\-dev")
 PV2="https://github.com/$R/$1/releases/download/v${PV1}/$2-${PV1}$4.$3"
 echo "- Url: $PV2"
-Taive "$PV2" "lib/$1.jar"; 
+wget -q -U "$UA" "$PV2" -O "lib/$1.jar" || Taive "$PV2" "lib/$1.jar"
+czip "lib/$1.jar";
 }
 
 # tải apk
+Lwget() { L1="$LT$(wget -q -U "$UA" "$LT/apk/$2" -O - | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"; [ -n "$L1" ] && L2="$LT$(wget -q -U "$UA" "$L1" -O - | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"; }
+Lcurl() { L1="$LT$(Xem "$LT/apk/$2" | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"; [ -n "$L1" ] && L2="$LT$(Xem "$L1" | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"; }
 taiyt() {
 LT="https://www.apkmirror.com"
-( L1="$LT$(wget -q -U "$UA" "$LT/apk/$2" -O - | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
-[ -n "$L1" ] && L2="$LT$(wget -q -U "$UA" "$L1" -O - | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
-echo "Link: $L2"
-wget -q -U "$UA" "$L2" -O "apk/$1"; ) || (
-L1="$LT$(Xem "$LT/apk/$2" | grep -m1 'downloadButton' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2)"
-[ -n "$L1" ] && L2="$LT$(Xem "$L1" | grep -m1 '>here<' | tr ' ' '\n' | grep -m1 'href=' | cut -d \" -f2 | sed 's|amp;||')"
-echo "Link: $L2"
-Taive "$L2" "apk/$1"; )
-file "apk/$1" | tee "apk/$1.txt";
+( Lwget; echo "Link: $L2"; wget -q -U "$UA" "$L2" -O "apk/$1"; ) || ( Lcurl; echo "Link: $L2"; Taive "$L2" "apk/$1"; )
+czip "apk/$1"; 
 }
 
 # Load dữ liệu cài đặt: . $HOME/.github/
@@ -72,16 +69,13 @@ pbdev morphe-desktop morphe-desktop jar -all
 pbdev morphe-patches patches mpp
 Ves1=$(Xem https://raw.githubusercontent.com/MorpheApp/morphe-patches/main/patches-list.json | jq -r '.patches[0].compatiblePackages[] | select(.packageName == "com.google.android.youtube") | .targets[] | select(.isExperimental == true) | .version' | head -n 1)
 Ves2=$(java -jar $lib1 list-versions --patches $lib2 --prerelease | sed -n '/com.google.android.youtube/,$p' | grep -oEm1 '[0-9]+\.[0-9]+\.[0-9]+')
-#sort -V -C <<< "$Ves1"$'\n'"$Ves2" && Ves=$Ves2 || Ves=$Ves1
 else echo "  Dùng Stable"
 pbsta morphe-desktop morphe-desktop jar -all
 pbsta morphe-patches patches mpp
 Ves1=$(Xem https://raw.githubusercontent.com/MorpheApp/morphe-patches/main/patches-list.json | jq -r '.patches[0].compatiblePackages[] | select(.packageName == "com.google.android.youtube") | .targets[] | select(.isExperimental == false) | .version' | head -n 1)
 Ves2=$(java -jar $lib1 list-versions --patches $lib2 | sed -n '/com.google.android.youtube/,$p' | grep -oEm1 '[0-9]+\.[0-9]+\.[0-9]+')
-#sort -V -C <<< "$Ves1"$'\n'"$Ves2" && Ves=$Ves2 || Ves=$Ves1
 fi
 
-#Ves=$(Xem https://raw.githubusercontent.com/MorpheApp/morphe-patches/main/patches-list.json | jq -r '.patches[0].compatiblePackages[] | select(.packageName == "com.google.android.youtube") | .targets[0].version')
 Ves=$Ves2
 echo " Phiên bản: $Ves"
 
@@ -141,7 +135,6 @@ ls apk/*.apk*
 if [ "$TYPE" == 'true' ]; then
  if [ -f apk/YouTube.apk ]; then 
  echo "- Giải nén Lib" 
- #cp apk/YouTube.apk Tav/base.apk 
  unzip -qo apk/YouTube.apk lib/$DEVICE/* -d tmp || echo " •Không có lib!"
  fi
  if [ -f apk/YouTube.apkm ]; then 
@@ -173,7 +166,6 @@ echo
 tam=$PWD/lib/tam && mkdir -p $tam
 tenapk=$(find "$PWD/apk" -maxdepth 1 -name "*.apk" | head -n 1)
 [ -z "$tenapk" ] && tenapk=$(find "$PWD/apk" -maxdepth 1 -name "*.apkm" | head -n 1)
-#tenapk=$(ls $PWD/apk/*.apk 2>/dev/null) || tenapk=$(ls $PWD/apk/*.apkm 2>/dev/null)
 eval "java -Djava.io.tmpdir=$HOME -jar $lib1 patch -p $lib2 -t $tam --disable-purge --keystore "$KN" --keystore-password "$KP" --keystore-entry-alias "$KA" --keystore-entry-password "$KP" -o YT.apk $tapk "$Tof $Ton $Mro $feature""
 echo '- Quá trình xây dựng apk xong.'
 echo
