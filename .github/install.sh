@@ -24,6 +24,7 @@ Taive() { curl -s -L -k -H "$User" --connect-timeout 20 "$1" -o "$2"; }
 XHex() { xxd -p "$@" | tr -d "\n" | tr -d ' '; }
 ZHex() { xxd -r -p "$@"; }
 apksign() { java -jar $HOME/.github/Tools/apksigner.jar sign --cert "$HOME/.github/Tools/cert.x509" --key "$HOME/.github/Tools/cert.pk8" --out "$2" "$1"; }
+apksigns() { java -jar $HOME/.github/Tools/apksigners.jar sign --cert "$HOME/.github/Tools/cert.x509" --key "$HOME/.github/Tools/cert.pk8" --v2-signing-enabled --v3-signing-enabled --v4-signing-enabled --out "$2" "$1"; }
 Upenv() { echo "$1=$2" >> $GITHUB_ENV; }
 checkfile() { [ -e "$1" ] && echo "FILE:  OK ${1##*/}" || ( echo "- Lỗi không không thấy file ${1##*/}"; exit 1; ); }
 checkzip() { [ "$(file $1 | grep -cm1 'Zip')" == 1 ] && echo "FILE:  OK ${1##*/}" || ( echo "- Lỗi file ${1##*/}"; exit 1; ); }
