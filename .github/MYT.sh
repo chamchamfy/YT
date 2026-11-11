@@ -3,13 +3,11 @@ UA="Mozilla/5.0 (Linux; Android 14; K) AppleWebKit/537.36 (KHTML, like Gecko) Ch
 Xem() { curl -sLNG -A "$UA" --connect-timeout 20 "$1"; }
 Taive() { curl -sL -A "$UA" --connect-timeout 20 "$1" -o "$2"; }
 czip() { [ -n "$(unzip -t $1 | grep 'No errors')" ] && echo "FILE: ${1##*/} OK" || echo "- Lỗi file ${1##*/}"; }
-# load dữ liệu 
 lib1="lib/morphe-desktop.jar"
 lib2="lib/morphe-patches.jar"
 KN="$HOME/.github/Tools/cc.keystore"
 KA="cc_alias"
 KP="chamchamfy"
-# tải patch
 R='MorpheApp'
 pbsta() {
 PV1=$(Xem https://api.github.com/repos/$R/$1/releases/latest | grep -oPm1 '"tag_name":\s*"v\K[^"]+')
@@ -28,19 +26,17 @@ czip "lib/$1.jar";
 tapkm() {
 PV1=$(Xem https://api.github.com/repos/tanishqmanuja/apkmirror-downloader/releases/latest | grep -oPm1 '"tag_name":\s*"v\K[^"]+')
 PV2="https://github.com/tanishqmanuja/apkmirror-downloader/releases/download/v${PV1}/apkmd"
-echo "-Url: $PV2"
+echo "-Tải APKMD: $PV2"
 wget -q -U "$UA" "$PV2" -O "$HOME/.github/apkmd" || Taive "$PV2" "$HOME/.github/apkmd"
-file "$HOME/.github/apkmd"
+checkfile "$HOME/.github/apkmd"
 chmod +x $HOME/.github/apkmd;
 }
-tapkm
+
 taiyt() {
-    local target_version="${1:-$VER}"
-    local save_dir="${2:-$LUU}"
-
-    if ! python3 -c "import curl_cffi, bs4" 2>/dev/null; then pip3 install --quiet --break-system-packages curl_cffi beautifulsoup4 >/dev/null 2>&1 || pip3 install --quiet curl_cffi beautifulsoup4 >/dev/null 2>&1 || { echo "❌ Lỗi cài đặt curl_cffi / beautifulsoup4"; return 1; }; fi
-
-    YT_VER="$target_version" YT_DIR="$save_dir" python3 - << 'EOF'
+local target_version="${1:-$VER}"
+local save_dir="${2:-$LUU}"
+if ! python3 -c "import curl_cffi, bs4" 2>/dev/null; then pip3 install --quiet curl_cffi beautifulsoup4 >/dev/null 2>&1 || { echo "❌ Lỗi cài đặt curl_cffi / beautifulsoup4"; return 1; }; fi
+YT_VER="$target_version" YT_DIR="$save_dir" python3 - << 'EOF'
 import os
 import sys
 import re
@@ -312,6 +308,7 @@ printf '{
     }
   ]
 }' > apps.json
+#tapkm
 #$HOME/.github/apkmd apps.json
 
 LUU="$PWD/apk" && taiyt
@@ -320,18 +317,14 @@ ls apk/*.apk*
 
 if [ "$TYPE" == 'true' ]; then
  if [ -f apk/YouTube.apk ]; then 
- echo "- Giải nén Lib" 
+ echo "- Giải nén Lib"
  unzip -qo apk/YouTube.apk lib/$DEVICE/* -d tmp || echo " •Không có lib!"
  fi
  if [ -f apk/YouTube.apkm ]; then 
- echo "- Giải nén base.apk" 
+ echo "- Giải nén base.apk"
  for f in 'base.apk' "split_config.${DEVICE//-/_}.apk" 'split_config.xxhdpi.apk' 'split_config.vi.apk'; do unzip -qo apk/YouTube.apkm "$f" -d Tav || echo " •Không có tập tin $f"; done
  fi
 fi
-
-# Copy 
-echo > $HOME/.github/Modun/common/$ach
-cp -rf $HOME/.github/Tools/sqlite3_$ach $HOME/.github/Modun/common/sqlite3
 
 if [ -f apk/YouTube.apk ]; then 
 echo "- Xoá lib thừa apk"
@@ -342,6 +335,7 @@ zip -qr $tapk -d $lib || echo " •Không có lib cần xoá!"
 fi
 if [ -f apk/YouTube.apkm ]; then
 echo "- Xoá lib thừa apkm"
+[ -f Tav/base.apk ] && apkeditor d -t sig -i "Tav/base.apk" -sig "signatures_dir" &>/dev/null
 tapk='apk/YouTube.apkm'
 zip -qr $tapk -d $libm || echo " •Không có lib cần xoá!"
 fi
@@ -359,20 +353,21 @@ echo
 # Chờ xây dựng xong
 if [ "$TYPE" == 'true' ]; then
 echo "Tạo rsign..."
-mv -f $tam/*/*.apk YT2.apk 2>/dev/null || mv -f $tam/*/rebuilt.apk YT2.apk 2>/dev/null
-mv YT.apk $HOME/Tav/YouTube.apk
-[ "$(ls -A tmp 2>/dev/null)" ] && cd tmp && zip -qr $HOME/YT2.apk *
+cp -rf YT.apk $HOME/Tav/YouTube.apk
+cp -rf YT.apk "$HOME/Up/MYT-$VER-$ach-rsign.apk" &>/dev/null
+[ "$(ls -A tmp 2>/dev/null)" ] && cd tmp && zip -qr $HOME/YT.apk *
 cd $HOME
-[ -f Tav/base.apk ] && apkeditor d -t sig -i "Tav/base.apk" -sig "signatures_dir" &>/dev/null
-apkeditor b -t sig -i YT2.apk -sig "$PWD/signatures_dir" -o "$HOME/Up/MYT-$VER-$ach-rsign.apk" &>/dev/null
+apkeditor b -f -t sig -i YT.apk -sig "$PWD/signatures_dir" -o "$HOME/Up/MYT-$VER-$ach-rsigns.apk" &>/dev/null
 else
-#apksign YT.apk $HOME/Up/MYT-$VER-$ach.apk
+#apksigns YT.apk $HOME/Up/MYT-$VER-$ach.apk
 cp -rf YT.apk $HOME/Up/MYT-$VER-$ach.apk
 ls Up
 exit 0
 fi
 
-cd Tav && tar -cf - * | xz -9kz > $HOME/.github/Modun/common/lib.tar.xz
+# Tạo thư viện
+cp -rf $HOME/.github/Tools/sqlite3_$ach $HOME/.github/Modun/sqlite3
+cd Tav && tar -cf - * | xz -9kz > $HOME/.github/Modun/lib.tar.xz
 cd $HOME
 
 # Tạo module.prop
