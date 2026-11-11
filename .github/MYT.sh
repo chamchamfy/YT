@@ -354,7 +354,7 @@ echo
 if [ "$TYPE" == 'true' ]; then
 echo "Tạo rsign..."
 cp -rf YT.apk $HOME/Tav/YouTube.apk
-cp -rf YT.apk "$HOME/Up/MYT-$VER-$ach-rsign.apk" &>/dev/null
+cp -rf YT.apk "$HOME/Up/MYT-$VER-$ach-rsign.apk" 2>/dev/null
 [ "$(ls -A tmp 2>/dev/null)" ] && cd tmp && zip -qr $HOME/YT.apk *
 cd $HOME
 apkeditor b -f -t sig -i YT.apk -sig "$PWD/signatures_dir" -o "$HOME/Up/MYT-$VER-$ach-rsigns.apk" &>/dev/null
