@@ -366,7 +366,7 @@ exit 0
 fi
 
 # Tạo thư viện
-cp -rf $HOME/.github/Tools/sqlite3_$ach $HOME/.github/Modun/sqlite3
+cp -rf $HOME/.github/Tools/sqlite3_$ach Tav/sqlite3
 cd Tav && tar -cf - * | xz -9kz > $HOME/.github/Modun/lib.tar.xz
 cd $HOME
 
