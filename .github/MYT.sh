@@ -35,7 +35,7 @@ chmod +x $HOME/.github/apkmd;
 taiyt() {
 local target_version="${1:-$VER}"
 local save_dir="${2:-$LUU}"
-if ! python3 -c "import curl_cffi, bs4" 2>/dev/null; then pip3 install --quiet curl_cffi beautifulsoup4 >/dev/null 2>&1 || { echo "❌ Lỗi cài đặt curl_cffi / beautifulsoup4"; return 1; }; fi
+if ! python3 -c "import curl_cffi, bs4" 2>/dev/null; then pip3 install --quiet --break-system-packages curl_cffi beautifulsoup4 >/dev/null 2>&1 || pip3 install --quiet curl_cffi beautifulsoup4 >/dev/null 2>&1 || { echo "❌ Lỗi cài đặt curl_cffi / beautifulsoup4"; return 1; }; fi
 YT_VER="$target_version" YT_DIR="$save_dir" python3 - << 'EOF'
 import os
 import sys
