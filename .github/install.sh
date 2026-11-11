@@ -5,7 +5,7 @@ sudo rm -rf /opt/ghc
 sudo rm -rf /usr/local/share/boost
 
 HOME="$GITHUB_WORKSPACE"
-sudo apt-get update -qq && sudo apt-get install -y -qq zipalign bash >/dev/null 2>&1
+#sudo apt-get install -y zipalign bash >/dev/null 2>&1
 pip3 install --quiet --break-system-packages curl_cffi beautifulsoup4 >/dev/null 2>&1 || pip3 install --quiet curl_cffi beautifulsoup4 >/dev/null 2>&1
 cd "$HOME"
 
