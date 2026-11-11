@@ -5,9 +5,9 @@ sudo rm -rf /opt/ghc
 sudo rm -rf /usr/local/share/boost
 
 HOME="$GITHUB_WORKSPACE"
-sudo apt install zipalign bash 2>/dev/null >/dev/null
+sudo apt-get update -qq && sudo apt-get install -y -qq zipalign bash >/dev/null 2>&1
 pip3 install --quiet --break-system-packages curl_cffi beautifulsoup4 >/dev/null 2>&1 || pip3 install --quiet curl_cffi beautifulsoup4 >/dev/null 2>&1
-cd $HOME
+cd "$HOME"
 
 date="$(TZ=Asia/Ho_Chi_Minh date +"%Y-%m-%d %H:%M:%S.%3N GMT%Z")"
 
