@@ -390,7 +390,7 @@ echo '{
 
 echo -e 'Update '$date' \nYouTube: '$VER' \nVersion: '${VER//./}'\nAuto by chamchamfy' > Up-M${V}notes.json
 
-# Tạo module
+# Tạo module magisk
 cd $HOME/.github/Modun
 zip -qr $HOME/Up/MYT-Hybrid-$VER-$ach.zip *
 cd $HOME
